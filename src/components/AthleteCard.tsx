@@ -9,10 +9,13 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
       className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent-primary/50 hover:shadow-2xl hover:shadow-accent-primary/20"
     >
       {/* Image */}
-      <div
-        className="relative aspect-[4/5] w-full overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url(${athlete.photo})` }}
-      >
+      <div className="relative aspect-[4/5] w-full overflow-hidden">
+        <img
+          src={athlete.photo}
+          alt={athlete.name}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
         <div
           className="absolute inset-0 opacity-0 transition group-hover:opacity-100"

@@ -100,9 +100,16 @@ export const useAthletesStore = create<State & Actions>()(
 
       refreshSeedAvailability: () =>
         set((s) => ({
-          athletes: s.athletes.map((a) =>
-            SEED_IDS.has(a.id) ? { ...a, availability: generateSeedAvailability(a.id) } : a
-          ),
+          athletes: s.athletes.map((a) => {
+            if (!SEED_IDS.has(a.id)) return a;
+            // Always re-sync the photo from the latest seed (in case we updated the URL)
+            const seed = SEED_ATHLETES.find((x) => x.id === a.id);
+            return {
+              ...a,
+              availability: generateSeedAvailability(a.id),
+              photo: seed?.photo ?? a.photo,
+            };
+          }),
         })),
     }),
     { name: 'proplay-athletes' }

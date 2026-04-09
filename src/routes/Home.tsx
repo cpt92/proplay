@@ -19,21 +19,21 @@ const TESTIMONIALS = [
       "Booked a former NHL forward to skate with my son's team. The kids talked about it for weeks. Worth every penny.",
     name: 'Marcus T.',
     role: 'Hockey dad, Toronto',
-    avatar: 'https://randomuser.me/api/portraits/men/41.jpg',
+    avatar: 'https://i.pravatar.cc/200?img=53',
   },
   {
     quote:
       "I play in a beer league and getting to golf 18 holes with a real pro was unreal. He was so down to earth and had the best stories.",
     name: 'Jenna L.',
     role: 'Recreational golfer',
-    avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+    avatar: 'https://i.pravatar.cc/200?img=47',
   },
   {
     quote:
       "I gifted my girlfriend a tennis lesson with a former WTA pro for her birthday. Best gift I've ever given. She still talks about it.",
     name: 'Devon S.',
     role: 'Boyfriend of the year',
-    avatar: 'https://randomuser.me/api/portraits/men/77.jpg',
+    avatar: 'https://i.pravatar.cc/200?img=8',
   },
 ];
 

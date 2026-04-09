@@ -41,7 +41,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 1, name: 'Mike Branson', sport: 'Hockey', position: 'Former NHL Forward',
     team: 'Toronto Maple Leafs (Retired)', location: 'Toronto, ON', initials: 'MB',
-    photo: 'https://randomuser.me/api/portraits/men/32.jpg', rating: 4.9, reviews: 47,
+    photo: 'https://i.pravatar.cc/800?img=12', rating: 4.9, reviews: 47,
     responseTime: 'Usually responds in 2 hours',
     bio: '14-year NHL veteran who played 800+ games. Passionate about giving back to the hockey community and connecting with fans. Whether it\'s skating with your kids\' team or joining your beer league, I bring the energy!',
     verified: true, color: '#1e3a8a',
@@ -56,7 +56,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 2, name: 'Serena Hayes', sport: 'Tennis', position: 'Former WTA Pro',
     team: 'Independent', location: 'Toronto, ON', initials: 'SH',
-    photo: 'https://randomuser.me/api/portraits/women/44.jpg', rating: 4.8, reviews: 39,
+    photo: 'https://i.pravatar.cc/800?img=5', rating: 4.8, reviews: 39,
     responseTime: 'Usually responds in 3 hours',
     bio: '12 years on the professional tennis circuit. I love coaching and playing with aspiring athletes. Let\'s improve your game or just have fun on the court!',
     verified: true, color: '#7c2d12',
@@ -70,7 +70,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 3, name: 'Alex Rodriguez', sport: 'Baseball', position: 'Former MLB Pitcher',
     team: 'Toronto Blue Jays (Retired)', location: 'Toronto, ON', initials: 'AR',
-    photo: 'https://randomuser.me/api/portraits/men/45.jpg', rating: 4.7, reviews: 28,
+    photo: 'https://i.pravatar.cc/800?img=33', rating: 4.7, reviews: 28,
     responseTime: 'Usually responds in 4 hours',
     bio: 'Pitched for 15 years across multiple MLB teams. Love teaching the next generation about baseball fundamentals and the mental side of sports.',
     verified: false, color: '#1e40af',
@@ -84,7 +84,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 4, name: 'Jordan Matthews', sport: 'Basketball', position: 'Former NBA Guard',
     team: 'Toronto Raptors (Retired)', location: 'Toronto, ON', initials: 'JM',
-    photo: 'https://randomuser.me/api/portraits/men/12.jpg', rating: 4.9, reviews: 56,
+    photo: 'https://i.pravatar.cc/800?img=68', rating: 4.9, reviews: 56,
     responseTime: 'Usually responds in 1 hour',
     bio: 'Spent 10 years in the NBA bringing intensity to the court. Now dedicated to coaching youth and adult players to reach their potential.',
     verified: true, color: '#7c3aed',
@@ -98,7 +98,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 5, name: 'Emma Wilson', sport: 'Soccer', position: 'Former NWSL Forward',
     team: 'Toronto FC Women (Retired)', location: 'Toronto, ON', initials: 'EW',
-    photo: 'https://randomuser.me/api/portraits/women/32.jpg', rating: 4.8, reviews: 42,
+    photo: 'https://i.pravatar.cc/800?img=49', rating: 4.8, reviews: 42,
     responseTime: 'Usually responds in 2 hours',
     bio: 'International soccer player with 50+ caps for Canada. Passionate about growing women\'s soccer and mentoring young athletes.',
     verified: true, color: '#059669',
@@ -112,7 +112,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 6, name: 'Marcus Thompson', sport: 'Football', position: 'Former CFL Running Back',
     team: 'Toronto Argonauts (Retired)', location: 'Toronto, ON', initials: 'MT',
-    photo: 'https://randomuser.me/api/portraits/men/67.jpg', rating: 4.6, reviews: 33,
+    photo: 'https://i.pravatar.cc/800?img=60', rating: 4.6, reviews: 33,
     responseTime: 'Usually responds in 5 hours',
     bio: 'Explosive runner with a passion for mentoring the next generation of CFL stars. Let\'s work on your footwork and athletic potential!',
     verified: false, color: '#b91c1c',
@@ -126,7 +126,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 7, name: 'Nicole Chen', sport: 'Gymnastics', position: 'Former National Team Member',
     team: 'Canada Gymnastics (Retired)', location: 'Toronto, ON', initials: 'NC',
-    photo: 'https://randomuser.me/api/portraits/women/18.jpg', rating: 4.9, reviews: 51,
+    photo: 'https://i.pravatar.cc/800?img=25', rating: 4.9, reviews: 51,
     responseTime: 'Usually responds in 1 hour',
     bio: 'Competed at the national level in artistic gymnastics. Now coaching and mentoring young gymnasts. I make fitness fun and accessible!',
     verified: true, color: '#db2777',
@@ -140,7 +140,7 @@ export const SEED_ATHLETES: Athlete[] = [
   {
     id: 8, name: 'David Park', sport: 'Esports', position: 'Former Pro Gamer',
     team: 'Immortals Gaming (Retired)', location: 'Toronto, ON', initials: 'DP',
-    photo: 'https://randomuser.me/api/portraits/men/88.jpg', rating: 4.7, reviews: 44,
+    photo: 'https://i.pravatar.cc/800?img=15', rating: 4.7, reviews: 44,
     responseTime: 'Usually responds in 2 hours',
     bio: 'Competed in professional esports for 8 years. Now coaching aspiring gamers and creating content. Let\'s level up your game!',
     verified: true, color: '#0891b2',

@@ -48,6 +48,9 @@ export default function AthleteProfile() {
               <img
                 src={athlete.photo}
                 alt={athlete.name}
+                width={400}
+                height={400}
+                loading="eager"
                 className="h-32 w-32 rounded-3xl border-4 border-white/20 object-cover shadow-2xl sm:h-40 sm:w-40"
               />
               {athlete.verified && (
