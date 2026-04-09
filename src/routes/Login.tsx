@@ -28,7 +28,7 @@ export default function Login() {
       if (password.length < 4) return setError('Password must be at least 4 characters.');
       const result = signup({ role, name, email, password });
       if ('error' in result) return setError(result.error);
-      toast.success(`Welcome to ProPlay, ${result.name.split(' ')[0]}!`);
+      toast.success(`Welcome to PlayWithAStar, ${result.name.split(' ')[0]}!`);
       navigate(next || (role === 'athlete' ? '/athlete/onboarding' : '/browse'));
     } else {
       const result = login(email, password);
@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="mx-auto max-w-md px-6 py-16 animate-fade-in">
       <h1 className="mb-2 text-center text-4xl font-extrabold">
-        {mode === 'signup' ? 'Join ProPlay' : 'Welcome back'}
+        {mode === 'signup' ? 'Join PlayWithAStar' : 'Welcome back'}
       </h1>
       <p className="mb-8 text-center text-ink-muted">
         {mode === 'signup' ? 'Sign up as a fan or a pro athlete.' : 'Sign in to your account.'}

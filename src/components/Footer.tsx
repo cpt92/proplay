@@ -4,17 +4,17 @@ export default function Footer() {
       <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-4">
         <div>
           <div className="mb-3 flex items-center gap-2 text-lg font-extrabold">
-            <span className="text-2xl">🏒</span>
-            <span className="bg-hero-gradient bg-clip-text text-transparent">ProPlay</span>
+            <span className="text-2xl">⭐</span>
+            <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
           </div>
-          <p className="text-sm text-ink-muted">Play with the pros. Real experiences with real athletes.</p>
+          <p className="text-sm text-ink-muted">Hire a pro athlete for the day. Real experiences with real stars.</p>
         </div>
         <FooterCol title="Platform" links={['Browse', 'How it works', 'Pricing']} />
         <FooterCol title="For athletes" links={['Become a pro', 'Athlete dashboard', 'Resources']} />
         <FooterCol title="Company" links={['About', 'Contact', 'Privacy']} />
       </div>
       <div className="border-t border-white/5 py-6 text-center text-xs text-ink-muted">
-        © {new Date().getFullYear()} ProPlay. All rights reserved.
+        © {new Date().getFullYear()} PlayWithAStar. All rights reserved.
       </div>
     </footer>
   );

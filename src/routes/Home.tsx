@@ -27,14 +27,22 @@ export default function Home() {
             Now booking experiences in the GTA
           </div>
           <h1 className="mb-6 text-5xl font-extrabold leading-tight md:text-7xl">
-            Play with the
+            Hire a pro athlete
             <br />
-            <span className="bg-hero-gradient bg-clip-text text-transparent">pros.</span>
+            <span className="bg-hero-gradient bg-clip-text text-transparent">for the day.</span>
           </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary">
-            Hire a real professional athlete for a round of golf, a skate with your kids' team,
-            a private training session, or whatever you're into. Like Cameo — but in person.
+          <p className="mx-auto mb-6 max-w-2xl text-lg text-ink-secondary">
+            Rent a real pro for a round of golf, a skate with your kids' team,
+            a private training session, or whatever you're into. Real stars, in person.
           </p>
+          <div aria-hidden className="mb-8 flex justify-center gap-3 text-3xl md:text-4xl opacity-90">
+            <span>⛳</span>
+            <span>🏒</span>
+            <span>⚽</span>
+            <span>🏀</span>
+            <span>🎾</span>
+            <span>⚾</span>
+          </div>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link to="/browse" className="btn-primary">Browse athletes →</Link>
             <Link to="/login" className="btn-secondary">Become a pro</Link>
