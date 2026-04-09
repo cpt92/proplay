@@ -1,9 +1,22 @@
 import { Link } from 'react-router-dom';
-import { FaStar, FaCircleCheck } from 'react-icons/fa6';
+import { FaStar, FaCircleCheck, FaHeart, FaRegHeart } from 'react-icons/fa6';
 import { type Athlete, minPrice } from '../lib/seed';
+import { useFavoritesStore } from '../store/useFavoritesStore';
+import { toast } from '../store/useToastStore';
 
 export default function AthleteCard({ athlete }: { athlete: Athlete }) {
   const price = minPrice(athlete);
+  const favorites = useFavoritesStore((s) => s.favorites);
+  const toggle = useFavoritesStore((s) => s.toggle);
+  const isFav = favorites.includes(athlete.id);
+
+  const handleFav = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggle(athlete.id);
+    toast.info(isFav ? 'Removed from favorites' : 'Saved to favorites');
+  };
+
   return (
     <Link
       to={`/athletes/${athlete.id}`}
@@ -25,8 +38,8 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
           }}
         />
 
-        {/* Top row: verified + price */}
-        <div className="absolute left-3 right-3 top-3 flex items-start justify-between">
+        {/* Top row: verified + price + favorite */}
+        <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2">
           {athlete.verified ? (
             <div className="inline-flex items-center gap-1 rounded-full bg-cyan/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan backdrop-blur">
               <FaCircleCheck className="h-3 w-3" /> Verified
@@ -34,11 +47,21 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
           ) : (
             <div />
           )}
-          {price !== null && (
-            <div className="rounded-full bg-black/70 px-3 py-1 text-xs font-bold text-white backdrop-blur">
-              From ${price}
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {price !== null && (
+              <div className="rounded-full bg-black/70 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+                From ${price}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={handleFav}
+              aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition hover:scale-110"
+            >
+              {isFav ? <FaHeart className="h-3.5 w-3.5 text-err" /> : <FaRegHeart className="h-3.5 w-3.5" />}
+            </button>
+          </div>
         </div>
 
         {/* Bottom: name + position + sport */}

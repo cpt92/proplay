@@ -1,22 +1,34 @@
 import { useMemo, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
+import { minPrice } from '../lib/seed';
 import AthleteCard from '../components/AthleteCard';
 
 const SPORTS = ['All', 'Hockey', 'Tennis', 'Baseball', 'Basketball', 'Soccer', 'Football', 'Gymnastics', 'Esports'];
 const CATEGORIES = ['All', 'Golf', 'Skating', 'Training', 'Other'] as const;
+const SORTS = [
+  { value: 'rating', label: 'Top rated' },
+  { value: 'price-asc', label: 'Price: low to high' },
+  { value: 'price-desc', label: 'Price: high to low' },
+  { value: 'reviews', label: 'Most reviewed' },
+] as const;
+type Sort = (typeof SORTS)[number]['value'];
 
 export default function Browse() {
   const athletes = useAthletesStore((s) => s.athletes);
   const [query, setQuery] = useState('');
   const [sport, setSport] = useState('All');
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>('All');
+  const [maxPrice, setMaxPrice] = useState(1000);
+  const [sort, setSort] = useState<Sort>('rating');
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return athletes.filter((a) => {
+    const list = athletes.filter((a) => {
       if (sport !== 'All' && a.sport !== sport) return false;
       if (category !== 'All' && !a.experiences.some((e) => e.category === category)) return false;
+      const price = minPrice(a);
+      if (price !== null && price > maxPrice) return false;
       if (
         q &&
         !a.name.toLowerCase().includes(q) &&
@@ -26,7 +38,23 @@ export default function Browse() {
         return false;
       return true;
     });
-  }, [athletes, query, sport, category]);
+    return list.sort((a, b) => {
+      if (sort === 'rating') return b.rating - a.rating;
+      if (sort === 'reviews') return b.reviews - a.reviews;
+      const pa = minPrice(a) ?? Infinity;
+      const pb = minPrice(b) ?? Infinity;
+      if (sort === 'price-asc') return pa - pb;
+      return pb - pa;
+    });
+  }, [athletes, query, sport, category, maxPrice, sort]);
+
+  const reset = () => {
+    setQuery('');
+    setSport('All');
+    setCategory('All');
+    setMaxPrice(1000);
+    setSort('rating');
+  };
 
   return (
     <div className="animate-fade-in">
@@ -47,7 +75,7 @@ export default function Browse() {
       <div className="mx-auto max-w-6xl px-6 py-10">
         {/* Filters */}
         <div className="mb-8 rounded-2xl border border-white/10 bg-card p-4">
-          <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
             <div className="relative">
               <FaMagnifyingGlass className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
               <input
@@ -75,6 +103,30 @@ export default function Browse() {
                 <option key={c}>{c}</option>
               ))}
             </select>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as Sort)}
+              className="rounded-xl border border-white/10 bg-bg-secondary/60 px-4 py-3 text-sm focus:border-accent-primary focus:outline-none"
+            >
+              {SORTS.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Price slider */}
+          <div className="mt-4 flex items-center gap-4">
+            <div className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Max price</div>
+            <input
+              type="range"
+              min="50"
+              max="1000"
+              step="50"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              className="flex-1 accent-accent-primary"
+            />
+            <div className="w-16 text-right text-sm font-bold">${maxPrice}{maxPrice >= 1000 ? '+' : ''}</div>
           </div>
         </div>
 
@@ -86,24 +138,28 @@ export default function Browse() {
           </div>
           <div className="flex flex-wrap gap-2">
             {sport !== 'All' && (
-              <button
-                onClick={() => setSport('All')}
-                className="chip hover:border-err/40 hover:text-err"
-              >
+              <button onClick={() => setSport('All')} className="chip hover:border-err/40 hover:text-err">
                 {sport} ✕
               </button>
             )}
             {category !== 'All' && (
-              <button
-                onClick={() => setCategory('All')}
-                className="chip hover:border-err/40 hover:text-err"
-              >
+              <button onClick={() => setCategory('All')} className="chip hover:border-err/40 hover:text-err">
                 {category} ✕
+              </button>
+            )}
+            {maxPrice < 1000 && (
+              <button onClick={() => setMaxPrice(1000)} className="chip hover:border-err/40 hover:text-err">
+                ≤${maxPrice} ✕
               </button>
             )}
             {query && (
               <button onClick={() => setQuery('')} className="chip hover:border-err/40 hover:text-err">
                 "{query}" ✕
+              </button>
+            )}
+            {(sport !== 'All' || category !== 'All' || query || maxPrice < 1000) && (
+              <button onClick={reset} className="chip hover:border-accent-primary/50 hover:text-accent-primary">
+                Clear all
               </button>
             )}
           </div>

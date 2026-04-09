@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa6';
 import { useAthletesStore } from './store/useAthletesStore';
@@ -6,20 +6,28 @@ import Nav from './components/Nav';
 import Footer from './components/Footer';
 import RequireAuth from './components/RequireAuth';
 import ToastHost from './components/ToastHost';
-import Home from './routes/Home';
-import Browse from './routes/Browse';
-import AthleteProfile from './routes/AthleteProfile';
-import Login from './routes/Login';
-import Booking from './routes/Booking';
-import BookingConfirmation from './routes/BookingConfirmation';
-import Onboarding from './routes/athlete/Onboarding';
-import Dashboard from './routes/athlete/Dashboard';
-import Experiences from './routes/athlete/Experiences';
-import Availability from './routes/athlete/Availability';
-import BookingRequests from './routes/athlete/BookingRequests';
-import MyBookings from './routes/fan/MyBookings';
-import Messages from './routes/Messages';
-import Admin from './routes/Admin';
+import ScrollToTop from './components/ScrollToTop';
+import PageLoader from './components/PageLoader';
+
+// Lazy-loaded routes — each becomes its own JS chunk so the initial load is small.
+const Home = lazy(() => import('./routes/Home'));
+const Browse = lazy(() => import('./routes/Browse'));
+const AthleteProfile = lazy(() => import('./routes/AthleteProfile'));
+const Login = lazy(() => import('./routes/Login'));
+const Booking = lazy(() => import('./routes/Booking'));
+const BookingConfirmation = lazy(() => import('./routes/BookingConfirmation'));
+const Messages = lazy(() => import('./routes/Messages'));
+const Admin = lazy(() => import('./routes/Admin'));
+const Faq = lazy(() => import('./routes/Faq'));
+const Privacy = lazy(() => import('./routes/Privacy'));
+const Terms = lazy(() => import('./routes/Terms'));
+const Favorites = lazy(() => import('./routes/Favorites'));
+const Onboarding = lazy(() => import('./routes/athlete/Onboarding'));
+const Dashboard = lazy(() => import('./routes/athlete/Dashboard'));
+const Experiences = lazy(() => import('./routes/athlete/Experiences'));
+const Availability = lazy(() => import('./routes/athlete/Availability'));
+const BookingRequests = lazy(() => import('./routes/athlete/BookingRequests'));
+const MyBookings = lazy(() => import('./routes/fan/MyBookings'));
 
 function NotFound() {
   return (
@@ -40,109 +48,114 @@ function NotFound() {
 export default function App() {
   const refreshSeedAvailability = useAthletesStore((s) => s.refreshSeedAvailability);
   useEffect(() => {
-    // Keep example athletes bookable: regenerate their availability for the next 14 days
-    // every time the app loads. User-created athletes are untouched.
     refreshSeedAvailability();
   }, [refreshSeedAvailability]);
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="flex min-h-screen flex-col">
         <Nav />
         <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/athletes/:id" element={<AthleteProfile />} />
-            <Route path="/login" element={<Login />} />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/athletes/:id" element={<AthleteProfile />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/favorites" element={<Favorites />} />
 
-            <Route
-              path="/book/confirmation/:id"
-              element={
-                <RequireAuth>
-                  <BookingConfirmation />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/book/:athleteId/:expId"
-              element={
-                <RequireAuth>
-                  <Booking />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/book/confirmation/:id"
+                element={
+                  <RequireAuth>
+                    <BookingConfirmation />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/book/:athleteId/:expId"
+                element={
+                  <RequireAuth>
+                    <Booking />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/fan/bookings"
-              element={
-                <RequireAuth role="fan">
-                  <MyBookings />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/fan/bookings"
+                element={
+                  <RequireAuth role="fan">
+                    <MyBookings />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/messages"
-              element={
-                <RequireAuth>
-                  <Messages />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/messages"
+                element={
+                  <RequireAuth>
+                    <Messages />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/admin"
-              element={
-                <RequireAuth>
-                  <Admin />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/admin"
+                element={
+                  <RequireAuth>
+                    <Admin />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/athlete/onboarding"
-              element={
-                <RequireAuth role="athlete">
-                  <Onboarding />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/athlete/dashboard"
-              element={
-                <RequireAuth role="athlete">
-                  <Dashboard />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/athlete/experiences"
-              element={
-                <RequireAuth role="athlete">
-                  <Experiences />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/athlete/availability"
-              element={
-                <RequireAuth role="athlete">
-                  <Availability />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/athlete/bookings"
-              element={
-                <RequireAuth role="athlete">
-                  <BookingRequests />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/athlete/onboarding"
+                element={
+                  <RequireAuth role="athlete">
+                    <Onboarding />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/athlete/dashboard"
+                element={
+                  <RequireAuth role="athlete">
+                    <Dashboard />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/athlete/experiences"
+                element={
+                  <RequireAuth role="athlete">
+                    <Experiences />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/athlete/availability"
+                element={
+                  <RequireAuth role="athlete">
+                    <Availability />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/athlete/bookings"
+                element={
+                  <RequireAuth role="athlete">
+                    <BookingRequests />
+                  </RequireAuth>
+                }
+              />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

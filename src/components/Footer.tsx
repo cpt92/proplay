@@ -29,6 +29,7 @@ export default function Footer() {
             title="Platform"
             links={[
               { label: 'Browse athletes', to: '/browse' },
+              { label: 'Favorites', to: '/favorites' },
               { label: 'How it works', to: '/' },
               { label: 'Sign in', to: '/login' },
             ]}
@@ -42,12 +43,12 @@ export default function Footer() {
             ]}
           />
           <FooterCol
-            title="Company"
+            title="Help & Legal"
             links={[
-              { label: 'About', to: '/' },
-              { label: 'Contact', to: '/' },
-              { label: 'Privacy', to: '/' },
-              { label: 'Terms', to: '/' },
+              { label: 'FAQ', to: '/faq' },
+              { label: 'Privacy Policy', to: '/privacy' },
+              { label: 'Terms of Service', to: '/terms' },
+              { label: 'Contact', to: '/faq' },
             ]}
           />
         </div>

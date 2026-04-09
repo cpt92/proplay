@@ -32,8 +32,12 @@ export default function Nav() {
         <NavLink to="/athlete/dashboard" className={linkClass} onClick={close}>My Dashboard</NavLink>
       )}
       {user?.role === 'fan' && (
-        <NavLink to="/fan/bookings" className={linkClass} onClick={close}>My Bookings</NavLink>
+        <>
+          <NavLink to="/fan/bookings" className={linkClass} onClick={close}>My Bookings</NavLink>
+          <NavLink to="/favorites" className={linkClass} onClick={close}>Favorites</NavLink>
+        </>
       )}
+      {!user && <NavLink to="/favorites" className={linkClass} onClick={close}>Favorites</NavLink>}
       {user && (
         <NavLink to="/messages" className={linkClass} onClick={close}>Messages</NavLink>
       )}
