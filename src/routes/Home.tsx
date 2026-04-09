@@ -1,16 +1,34 @@
+import type { ComponentType } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  FaHockeyPuck,
+  FaGolfBallTee,
+  FaFutbol,
+  FaBasketball,
+  FaBaseball,
+  FaTrophy,
+  FaBoltLightning,
+  FaStar,
+  FaCheck,
+  FaMagnifyingGlass,
+  FaCalendarDays,
+  FaHandshake,
+} from 'react-icons/fa6';
+import { GiTennisRacket } from 'react-icons/gi';
 import { useAthletesStore } from '../store/useAthletesStore';
 import { useBookingsStore } from '../store/useBookingsStore';
 import { useReviewsStore } from '../store/useReviewsStore';
 import AthleteCard from '../components/AthleteCard';
 
-const SPORT_CATEGORIES = [
-  { name: 'Hockey', icon: '🏒', gradient: 'from-blue-500 to-cyan-400' },
-  { name: 'Golf', icon: '⛳', gradient: 'from-emerald-500 to-teal-400' },
-  { name: 'Soccer', icon: '⚽', gradient: 'from-lime-500 to-green-400' },
-  { name: 'Basketball', icon: '🏀', gradient: 'from-orange-500 to-amber-400' },
-  { name: 'Tennis', icon: '🎾', gradient: 'from-yellow-400 to-lime-300' },
-  { name: 'Baseball', icon: '⚾', gradient: 'from-red-500 to-rose-400' },
+type IconType = ComponentType<{ className?: string }>;
+
+const SPORT_CATEGORIES: { name: string; Icon: IconType; gradient: string }[] = [
+  { name: 'Hockey', Icon: FaHockeyPuck, gradient: 'from-blue-500 to-cyan-400' },
+  { name: 'Golf', Icon: FaGolfBallTee, gradient: 'from-emerald-500 to-teal-400' },
+  { name: 'Soccer', Icon: FaFutbol, gradient: 'from-lime-500 to-green-400' },
+  { name: 'Basketball', Icon: FaBasketball, gradient: 'from-orange-500 to-amber-400' },
+  { name: 'Tennis', Icon: GiTennisRacket, gradient: 'from-yellow-400 to-lime-300' },
+  { name: 'Baseball', Icon: FaBaseball, gradient: 'from-red-500 to-rose-400' },
 ];
 
 const TESTIMONIALS = [
@@ -96,13 +114,13 @@ export default function Home() {
 
           {/* Sport pills */}
           <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-            {SPORT_CATEGORIES.map((s) => (
+            {SPORT_CATEGORIES.map(({ name, Icon }) => (
               <span
-                key={s.name}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-ink-secondary backdrop-blur"
+                key={name}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm text-ink-secondary backdrop-blur"
               >
-                <span>{s.icon}</span>
-                {s.name}
+                <Icon className="h-3.5 w-3.5 text-accent-primary" />
+                {name}
               </span>
             ))}
           </div>
@@ -118,9 +136,9 @@ export default function Home() {
 
           {/* Trust microcopy */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-ink-muted">
-            <span className="inline-flex items-center gap-1.5">✓ Verified pros only</span>
-            <span className="inline-flex items-center gap-1.5">✓ Secure payments</span>
-            <span className="inline-flex items-center gap-1.5">✓ 100% satisfaction guarantee</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
           </div>
         </div>
       </section>
@@ -144,10 +162,10 @@ export default function Home() {
       {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <Stat icon="🏆" label="Pro athletes" value={`${athletes.length}`} />
-          <Stat icon="⚡" label="Experiences" value={`${totalExperiences}`} />
-          <Stat icon="📅" label="Bookings" value={`${completedBookings}`} />
-          <Stat icon="⭐" label="Avg rating" value={`${avgRating}`} />
+          <Stat Icon={FaTrophy} label="Pro athletes" value={`${athletes.length}`} />
+          <Stat Icon={FaBoltLightning} label="Experiences" value={`${totalExperiences}`} />
+          <Stat Icon={FaCalendarDays} label="Bookings" value={`${completedBookings}`} />
+          <Stat Icon={FaStar} label="Avg rating" value={`${avgRating}`} />
         </div>
       </section>
 
@@ -160,18 +178,20 @@ export default function Home() {
           <h2 className="text-4xl font-extrabold tracking-tight">Pick your game</h2>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {SPORT_CATEGORIES.map((s) => (
+          {SPORT_CATEGORIES.map(({ name, Icon, gradient }) => (
             <Link
-              key={s.name}
+              key={name}
               to="/browse"
               className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 text-center transition hover:-translate-y-1 hover:border-white/30"
             >
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-0 transition group-hover:opacity-20`}
+                className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 transition group-hover:opacity-20`}
               />
               <div className="relative">
-                <div className="mb-2 text-4xl">{s.icon}</div>
-                <div className="text-sm font-semibold">{s.name}</div>
+                <div className="mb-3 flex justify-center">
+                  <Icon className="h-8 w-8 text-accent-primary transition group-hover:text-white" />
+                </div>
+                <div className="text-sm font-semibold">{name}</div>
               </div>
             </Link>
           ))}
@@ -213,19 +233,19 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           <Step
             n="1"
-            icon="🔍"
+            Icon={FaMagnifyingGlass}
             title="Pick a pro"
             body="Browse athletes by sport, see their experiences, and find the perfect match."
           />
           <Step
             n="2"
-            icon="📅"
+            Icon={FaCalendarDays}
             title="Book a slot"
             body="Choose from their real availability and pay securely. Done in 60 seconds."
           />
           <Step
             n="3"
-            icon="🤝"
+            Icon={FaHandshake}
             title="Show up & play"
             body="Chat directly to coordinate the details, then meet your hero in person."
           />
@@ -251,7 +271,11 @@ export default function Home() {
                   <div className="text-sm font-semibold">{t.name}</div>
                   <div className="text-xs text-ink-muted">{t.role}</div>
                 </div>
-                <div className="ml-auto text-warn">★★★★★</div>
+                <div className="ml-auto flex items-center gap-0.5 text-warn">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <FaStar key={i} className="h-3 w-3" />
+                ))}
+              </div>
               </div>
             </div>
           ))}
@@ -286,10 +310,12 @@ export default function Home() {
   );
 }
 
-function Stat({ icon, label, value }: { icon: string; label: string; value: string }) {
+function Stat({ Icon, label, value }: { Icon: IconType; label: string; value: string }) {
   return (
     <div className="card text-center">
-      <div className="mb-1 text-2xl">{icon}</div>
+      <div className="mb-2 flex justify-center">
+        <Icon className="h-6 w-6 text-accent-primary" />
+      </div>
       <div className="bg-hero-gradient bg-clip-text text-3xl font-extrabold text-transparent md:text-4xl">
         {value}
       </div>
@@ -298,15 +324,15 @@ function Stat({ icon, label, value }: { icon: string; label: string; value: stri
   );
 }
 
-function Step({ n, icon, title, body }: { n: string; icon: string; title: string; body: string }) {
+function Step({ n, Icon, title, body }: { n: string; Icon: IconType; title: string; body: string }) {
   return (
     <div className="card relative overflow-hidden">
       <div className="absolute -right-4 -top-4 text-9xl font-extrabold leading-none text-white/[0.03]">
         {n}
       </div>
       <div className="relative">
-        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-2xl">
-          {icon}
+        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+          <Icon className="h-5 w-5" />
         </div>
         <div className="mb-1 text-xl font-bold">{title}</div>
         <div className="text-sm text-ink-muted">{body}</div>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
 import AthleteCard from '../components/AthleteCard';
 
@@ -48,9 +49,7 @@ export default function Browse() {
         <div className="mb-8 rounded-2xl border border-white/10 bg-card p-4">
           <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted">
-                🔍
-              </span>
+              <FaMagnifyingGlass className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -112,7 +111,9 @@ export default function Browse() {
 
         {filtered.length === 0 ? (
           <div className="card py-16 text-center">
-            <div className="mb-3 text-5xl">🔍</div>
+            <div className="mb-3 flex justify-center">
+              <FaMagnifyingGlass className="h-12 w-12 text-ink-muted" />
+            </div>
             <div className="mb-1 text-lg font-bold">No matches</div>
             <div className="text-sm text-ink-muted">Try clearing some filters.</div>
           </div>

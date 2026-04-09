@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { FaStar, FaCircleCheck } from 'react-icons/fa6';
 import { type Athlete, minPrice } from '../lib/seed';
 
 export default function AthleteCard({ athlete }: { athlete: Athlete }) {
@@ -28,7 +29,7 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
         <div className="absolute left-3 right-3 top-3 flex items-start justify-between">
           {athlete.verified ? (
             <div className="inline-flex items-center gap-1 rounded-full bg-cyan/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan backdrop-blur">
-              ✓ Verified
+              <FaCircleCheck className="h-3 w-3" /> Verified
             </div>
           ) : (
             <div />
@@ -53,7 +54,7 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
       {/* Bottom card */}
       <div className="flex items-center justify-between border-t border-white/5 px-4 py-3">
         <div className="flex items-center gap-1.5 text-sm">
-          <span className="text-warn">★</span>
+          <FaStar className="h-3.5 w-3.5 text-warn" />
           <span className="font-bold text-ink-primary">{athlete.rating}</span>
           <span className="text-ink-muted">({athlete.reviews})</span>
         </div>

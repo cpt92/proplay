@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { FaStar, FaXTwitter, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa6';
 
 export default function Footer() {
   return (
@@ -7,7 +8,9 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
             <Link to="/" className="mb-4 inline-flex items-center gap-2 text-xl font-extrabold">
-              <span className="text-2xl">⭐</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+                <FaStar className="h-4 w-4" />
+              </span>
               <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-ink-muted">
@@ -15,10 +18,10 @@ export default function Footer() {
               skating, training, or whatever you're into.
             </p>
             <div className="mt-5 flex gap-3">
-              <SocialLink icon="𝕏" label="Twitter" />
-              <SocialLink icon="📷" label="Instagram" />
-              <SocialLink icon="🎵" label="TikTok" />
-              <SocialLink icon="▶" label="YouTube" />
+              <SocialLink Icon={FaXTwitter} label="Twitter" />
+              <SocialLink Icon={FaInstagram} label="Instagram" />
+              <SocialLink Icon={FaTiktok} label="TikTok" />
+              <SocialLink Icon={FaYoutube} label="YouTube" />
             </div>
           </div>
 
@@ -54,9 +57,7 @@ export default function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-xs text-ink-muted sm:flex-row">
           <div>© {new Date().getFullYear()} PlayWithAStar. All rights reserved.</div>
           <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1.5">🇨🇦 Canada</span>
-            <span>·</span>
-            <span>Made with ❤ in Toronto</span>
+            <span>Toronto, Canada</span>
           </div>
         </div>
       </div>
@@ -87,14 +88,14 @@ function FooterCol({
   );
 }
 
-function SocialLink({ icon, label }: { icon: string; label: string }) {
+function SocialLink({ Icon, label }: { Icon: React.ComponentType<{ className?: string }>; label: string }) {
   return (
     <button
       type="button"
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-sm transition hover:border-accent-primary/40 hover:text-white"
+      className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-sm text-ink-secondary transition hover:border-accent-primary/40 hover:text-white"
     >
-      {icon}
+      <Icon className="h-4 w-4" />
     </button>
   );
 }

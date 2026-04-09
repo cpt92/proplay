@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import { FaStar, FaCheck, FaArrowLeft, FaRegClock } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
 import { useReviewsStore } from '../store/useReviewsStore';
 
@@ -41,7 +42,7 @@ export default function AthleteProfile() {
 
         <div className="mx-auto max-w-5xl px-6 py-16">
           <Link to="/browse" className="mb-6 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-white">
-            ← Back to athletes
+            <FaArrowLeft className="h-3 w-3" /> Back to athletes
           </Link>
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
             <div className="relative">
@@ -55,7 +56,7 @@ export default function AthleteProfile() {
               />
               {athlete.verified && (
                 <div className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-bg-primary bg-cyan text-bg-primary">
-                  ✓
+                  <FaCheck className="h-4 w-4" />
                 </div>
               )}
             </div>
@@ -70,7 +71,7 @@ export default function AthleteProfile() {
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
                 <div className="inline-flex items-center gap-1.5">
-                  <span className="text-warn">★</span>
+                  <FaStar className="h-4 w-4 text-warn" />
                   <span className="font-bold">{ratingDisplay || '—'}</span>
                   <span className="text-ink-muted">({reviewCount})</span>
                 </div>
@@ -131,7 +132,9 @@ export default function AthleteProfile() {
                           {e.category}
                         </div>
                         <div className="text-xl font-bold leading-tight">{e.title}</div>
-                        <div className="mt-0.5 text-xs text-ink-muted">⏱ {e.duration}</div>
+                        <div className="mt-1 inline-flex items-center gap-1 text-xs text-ink-muted">
+                          <FaRegClock className="h-3 w-3" /> {e.duration}
+                        </div>
                       </div>
                       <div className="text-right">
                         <div className="text-3xl font-extrabold leading-none">${e.price}</div>
@@ -166,9 +169,13 @@ export default function AthleteProfile() {
                         {format(new Date(r.createdAt), 'MMM d, yyyy')}
                       </div>
                     </div>
-                    <div className="text-warn">
-                      {'★'.repeat(r.rating)}
-                      <span className="text-ink-muted">{'★'.repeat(5 - r.rating)}</span>
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <FaStar
+                          key={i}
+                          className={`h-3.5 w-3.5 ${i < r.rating ? 'text-warn' : 'text-ink-muted/30'}`}
+                        />
+                      ))}
                     </div>
                   </div>
                   <p className="mt-3 text-sm leading-relaxed text-ink-secondary">{r.text}</p>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa6';
 import { useAthletesStore } from './store/useAthletesStore';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
@@ -23,7 +24,9 @@ import Admin from './routes/Admin';
 function NotFound() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-24 text-center">
-      <div className="mb-6 text-6xl">⭐</div>
+      <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-xl">
+        <FaStar className="h-8 w-8" />
+      </div>
       <h1 className="mb-3 text-5xl font-extrabold">404</h1>
       <p className="mb-6 text-ink-muted">That page doesn't exist. Maybe you meant one of these?</p>
       <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">

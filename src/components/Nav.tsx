@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa6';
+import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 import { useAuthStore } from '../store/useAuthStore';
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -45,7 +47,9 @@ export default function Nav() {
     <header className="sticky top-0 z-40 border-b border-white/5 bg-bg-primary/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2 text-lg font-extrabold" onClick={close}>
-          <span className="text-2xl">⭐</span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+            <FaStar className="h-4 w-4" />
+          </span>
           <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
         </Link>
 
@@ -73,7 +77,7 @@ export default function Nav() {
             onClick={() => setOpen((o) => !o)}
             className="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 md:hidden"
           >
-            {open ? '✕' : '☰'}
+            {open ? <HiOutlineX className="h-5 w-5" /> : <HiOutlineMenu className="h-5 w-5" />}
           </button>
         </div>
       </div>

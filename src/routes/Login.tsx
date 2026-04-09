@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa6';
 import { useAuthStore, type Role } from '../store/useAuthStore';
 import { toast } from '../store/useToastStore';
 
@@ -47,8 +48,8 @@ export default function Login() {
 
       <div className="mx-auto max-w-md px-6 py-20">
         <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-card text-3xl shadow-2xl">
-            ⭐
+          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-2xl shadow-accent-primary/30">
+            <FaStar className="h-6 w-6" />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight">
             {mode === 'signup' ? 'Join PlayWithAStar' : 'Welcome back'}
