@@ -1,10 +1,24 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, isBefore, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
+import {
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isBefore,
+  isSameDay,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
+import { Elements } from '@stripe/react-stripe-js';
 import { useAthletesStore } from '../store/useAthletesStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useBookingsStore } from '../store/useBookingsStore';
 import { toast } from '../store/useToastStore';
+import { getStripe, STRIPE_CONFIGURED } from '../lib/stripe';
+import CheckoutForm from '../components/Stripe/CheckoutForm';
 
 const STEPS = ['Review', 'Pick a date', 'Pick a time', 'Checkout'] as const;
 
@@ -21,17 +35,51 @@ export default function Booking() {
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
-  const [card, setCard] = useState({ number: '', exp: '', cvc: '' });
-  const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  // Stripe state
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+  const [creatingIntent, setCreatingIntent] = useState(false);
 
   const exp = athlete?.experiences.find((e) => e.id === expId);
+  const stripePromise = getStripe();
 
   const days = useMemo(() => {
     const start = startOfWeek(startOfMonth(month));
     const end = endOfWeek(endOfMonth(month));
     return eachDayOfInterval({ start, end });
   }, [month]);
+
+  // When the user reaches the checkout step, ask the serverless function for a PaymentIntent
+  useEffect(() => {
+    if (step !== 3 || !exp || !athlete || clientSecret || !STRIPE_CONFIGURED) return;
+    let cancelled = false;
+    (async () => {
+      setCreatingIntent(true);
+      setStripeError(null);
+      try {
+        const res = await fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: exp.price,
+            athleteName: athlete.name,
+            experienceTitle: exp.title,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error ?? 'Could not start payment');
+        if (!cancelled) setClientSecret(data.clientSecret);
+      } catch (err) {
+        if (!cancelled) setStripeError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        if (!cancelled) setCreatingIntent(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [step, exp, athlete, clientSecret]);
 
   if (!user) return <Navigate to="/login" replace />;
   if (!athlete || !exp) {
@@ -55,32 +103,21 @@ export default function Booking() {
   const avail = athlete.availability ?? {};
   const today = new Date();
 
-  const handlePay = () => {
-    setError(null);
-    if (!date || !time) {
-      setError('Pick a date and time first.');
-      return;
-    }
-    if (!/^\d{12,19}$/.test(card.number.replace(/\s/g, ''))) {
-      setError('Enter a 12–19 digit card number. (Mock — anything works)');
-      return;
-    }
-    setProcessing(true);
-    setTimeout(() => {
-      const booking = createBooking({
-        fanId: user.id,
-        fanName: user.name,
-        athleteId: athlete.id,
-        experienceId: exp.id,
-        experienceTitle: exp.title,
-        date,
-        time,
-        total: exp.price,
-        paymentRef: `mock_pi_${crypto.randomUUID().slice(0, 8)}`,
-      });
-      toast.success('Payment processed — booking sent to athlete!');
-      navigate(`/book/confirmation/${booking.id}`);
-    }, 900);
+  const finishBooking = (paymentRef: string) => {
+    if (!date || !time) return;
+    const booking = createBooking({
+      fanId: user.id,
+      fanName: user.name,
+      athleteId: athlete.id,
+      experienceId: exp.id,
+      experienceTitle: exp.title,
+      date,
+      time,
+      total: exp.price,
+      paymentRef,
+    });
+    toast.success('Payment successful — booking sent to athlete!');
+    navigate(`/book/confirmation/${booking.id}`);
   };
 
   return (
@@ -198,24 +235,54 @@ export default function Booking() {
 
         {step === 3 && (
           <>
-            <div className="rounded-lg border border-warn/40 bg-warn/10 p-3 text-xs text-warn">
-              ⚠️ Mock checkout — this does not charge a real card. Real Stripe will be wired in once a backend is deployed.
-            </div>
             <div className="rounded-lg border border-white/10 bg-bg-secondary/40 p-4 text-sm">
               <div className="flex justify-between"><span className="text-ink-muted">Experience</span><span>{exp.title}</span></div>
               <div className="flex justify-between"><span className="text-ink-muted">When</span><span>{date && format(new Date(date), 'MMM d')} · {time}</span></div>
               <div className="mt-2 flex justify-between border-t border-white/10 pt-2 font-bold"><span>Total</span><span>${exp.price}</span></div>
             </div>
 
-            <Field label="Card number">
-              <input className="input" placeholder="4242 4242 4242 4242" value={card.number} onChange={(e) => setCard({ ...card, number: e.target.value })} />
-            </Field>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Expiry"><input className="input" placeholder="MM/YY" value={card.exp} onChange={(e) => setCard({ ...card, exp: e.target.value })} /></Field>
-              <Field label="CVC"><input className="input" placeholder="123" value={card.cvc} onChange={(e) => setCard({ ...card, cvc: e.target.value })} /></Field>
-            </div>
-
-            {error && <div className="rounded-lg border border-err/40 bg-err/10 p-3 text-sm text-err">{error}</div>}
+            {STRIPE_CONFIGURED && stripePromise ? (
+              creatingIntent ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-accent-primary" />
+                </div>
+              ) : stripeError ? (
+                <div className="rounded-lg border border-err/40 bg-err/10 p-3 text-sm text-err">
+                  {stripeError}
+                </div>
+              ) : clientSecret ? (
+                <Elements
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: 'night',
+                      variables: {
+                        colorPrimary: '#6366f1',
+                        colorBackground: '#1a1a2e',
+                        colorText: '#f1f5f9',
+                        colorDanger: '#ef4444',
+                        fontFamily: 'Inter, sans-serif',
+                        borderRadius: '8px',
+                      },
+                    },
+                  }}
+                >
+                  <CheckoutForm
+                    amount={exp.price}
+                    onSuccess={(piId) => finishBooking(piId)}
+                  />
+                </Elements>
+              ) : null
+            ) : (
+              <div className="rounded-lg border border-warn/40 bg-warn/10 p-4 text-sm text-warn">
+                Stripe is not configured for this environment. Set
+                <code className="mx-1 rounded bg-white/5 px-1.5 py-0.5">VITE_STRIPE_PUBLISHABLE_KEY</code>
+                and
+                <code className="mx-1 rounded bg-white/5 px-1.5 py-0.5">STRIPE_SECRET_KEY</code>
+                in Vercel and redeploy.
+              </div>
+            )}
           </>
         )}
 
@@ -224,12 +291,12 @@ export default function Booking() {
             type="button"
             onClick={() => setStep((s) => Math.max(0, s - 1))}
             className="btn-secondary !px-4 !py-2 text-sm disabled:opacity-50"
-            disabled={step === 0 || processing}
+            disabled={step === 0}
           >
             ← Back
           </button>
 
-          {step < STEPS.length - 1 ? (
+          {step < STEPS.length - 1 && (
             <button
               type="button"
               onClick={() => setStep((s) => s + 1)}
@@ -238,27 +305,9 @@ export default function Booking() {
             >
               Continue →
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handlePay}
-              disabled={processing}
-              className="btn-primary !px-4 !py-2 text-sm disabled:opacity-50"
-            >
-              {processing ? 'Processing…' : `Pay $${exp.price}`}
-            </button>
           )}
         </div>
       </div>
     </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">{label}</div>
-      {children}
-    </label>
   );
 }
