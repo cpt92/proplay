@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format, isBefore } from 'date-fns';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -21,7 +21,11 @@ export default function MyBookings() {
   const user = useAuthStore((s) =>
     s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
   );
-  const bookings = useBookingsStore((s) => (user ? s.byFan(user.id) : []));
+  const allBookings = useBookingsStore((s) => s.bookings);
+  const bookings = useMemo(
+    () => (user ? allBookings.filter((b) => b.fanId === user.id) : []),
+    [allBookings, user]
+  );
   const setStatus = useBookingsStore((s) => s.setStatus);
   const athletes = useAthletesStore((s) => s.athletes);
   const reviews = useReviewsStore((s) => s.reviews);

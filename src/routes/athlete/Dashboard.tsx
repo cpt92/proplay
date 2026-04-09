@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useAthletesStore } from '../../store/useAthletesStore';
@@ -8,7 +9,11 @@ export default function Dashboard() {
     s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
   );
   const athlete = useAthletesStore((s) => (user ? s.getByOwner(user.id) : undefined));
-  const bookings = useBookingsStore((s) => (athlete ? s.byAthlete(athlete.id) : []));
+  const allBookings = useBookingsStore((s) => s.bookings);
+  const bookings = useMemo(
+    () => (athlete ? allBookings.filter((b) => b.athleteId === athlete.id) : []),
+    [allBookings, athlete]
+  );
 
   if (!user) return null;
 

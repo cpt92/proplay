@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -16,7 +17,11 @@ const STATUS_STYLE: Record<BookingStatus, string> = {
 export default function BookingRequests() {
   const userId = useAuthStore((s) => s.currentUserId);
   const athlete = useAthletesStore((s) => (userId ? s.getByOwner(userId) : undefined));
-  const bookings = useBookingsStore((s) => (athlete ? s.byAthlete(athlete.id) : []));
+  const allBookings = useBookingsStore((s) => s.bookings);
+  const bookings = useMemo(
+    () => (athlete ? allBookings.filter((b) => b.athleteId === athlete.id) : []),
+    [allBookings, athlete]
+  );
   const setStatus = useBookingsStore((s) => s.setStatus);
 
   if (!athlete) return null;

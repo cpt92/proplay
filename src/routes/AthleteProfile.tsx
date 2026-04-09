@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { FaStar, FaCheck, FaArrowLeft, FaRegClock } from 'react-icons/fa6';
@@ -8,8 +9,21 @@ export default function AthleteProfile() {
   const { id } = useParams();
   const athleteId = Number(id);
   const athlete = useAthletesStore((s) => s.getById(athleteId));
-  const reviews = useReviewsStore((s) => s.forAthlete(athleteId));
-  const ratingInfo = useReviewsStore((s) => s.averageFor(athleteId));
+  // Read the raw arrays from the store (stable references) and compute locally.
+  // Using selector functions that return fresh arrays causes infinite re-renders.
+  const allReviews = useReviewsStore((s) => s.reviews);
+  const reviews = useMemo(
+    () =>
+      allReviews
+        .filter((r) => r.athleteId === athleteId)
+        .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    [allReviews, athleteId]
+  );
+  const ratingInfo = useMemo(() => {
+    if (reviews.length === 0) return { avg: 0, count: 0 };
+    const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+    return { avg: Math.round(avg * 10) / 10, count: reviews.length };
+  }, [reviews]);
 
   if (!athlete) {
     return (
