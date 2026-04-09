@@ -4,13 +4,51 @@ import { useBookingsStore } from '../store/useBookingsStore';
 import { useReviewsStore } from '../store/useReviewsStore';
 import AthleteCard from '../components/AthleteCard';
 
+const SPORT_CATEGORIES = [
+  { name: 'Hockey', icon: '🏒', gradient: 'from-blue-500 to-cyan-400' },
+  { name: 'Golf', icon: '⛳', gradient: 'from-emerald-500 to-teal-400' },
+  { name: 'Soccer', icon: '⚽', gradient: 'from-lime-500 to-green-400' },
+  { name: 'Basketball', icon: '🏀', gradient: 'from-orange-500 to-amber-400' },
+  { name: 'Tennis', icon: '🎾', gradient: 'from-yellow-400 to-lime-300' },
+  { name: 'Baseball', icon: '⚾', gradient: 'from-red-500 to-rose-400' },
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "Booked a former NHL forward to skate with my son's team. The kids talked about it for weeks. Worth every penny.",
+    name: 'Marcus T.',
+    role: 'Hockey dad, Toronto',
+    avatar: 'https://randomuser.me/api/portraits/men/41.jpg',
+  },
+  {
+    quote:
+      "I play in a beer league and getting to golf 18 holes with a real pro was unreal. He was so down to earth and had the best stories.",
+    name: 'Jenna L.',
+    role: 'Recreational golfer',
+    avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+  },
+  {
+    quote:
+      "I gifted my girlfriend a tennis lesson with a former WTA pro for her birthday. Best gift I've ever given. She still talks about it.",
+    name: 'Devon S.',
+    role: 'Boyfriend of the year',
+    avatar: 'https://randomuser.me/api/portraits/men/77.jpg',
+  },
+];
+
+const PRESS = ['THE ATHLETIC', 'TSN', 'ESPN', 'SPORTSNET', 'BLEACHER REPORT'];
+
 export default function Home() {
   const athletes = useAthletesStore((s) => s.athletes);
   const bookings = useBookingsStore((s) => s.bookings);
   const reviews = useReviewsStore((s) => s.reviews);
+
   const featured = [...athletes].sort((a, b) => b.rating - a.rating).slice(0, 4);
   const totalExperiences = athletes.reduce((acc, a) => acc + a.experiences.length, 0);
-  const completedBookings = bookings.filter((b) => b.status === 'completed' || b.status === 'confirmed').length;
+  const completedBookings = bookings.filter(
+    (b) => b.status === 'completed' || b.status === 'confirmed'
+  ).length;
   const avgRating =
     reviews.length > 0
       ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
@@ -18,57 +56,143 @@ export default function Home() {
 
   return (
     <div className="animate-fade-in">
-      {/* Hero */}
+      {/* ============ HERO ============ */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-hero-gradient opacity-20 blur-3xl" />
-        <div className="relative mx-auto max-w-6xl px-6 pb-20 pt-16 text-center md:pt-24">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-medium text-ink-secondary">
-            <span className="h-2 w-2 rounded-full bg-ok animate-pulse" />
+        {/* Background mesh gradient */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-accent-primary/30 blur-[120px]" />
+          <div className="absolute -top-20 left-1/4 h-[500px] w-[700px] rounded-full bg-accent-tertiary/20 blur-[120px]" />
+          <div className="absolute -top-20 right-1/4 h-[500px] w-[700px] rounded-full bg-accent-secondary/20 blur-[120px]" />
+        </div>
+        {/* Subtle grid */}
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 text-center md:pt-32">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-ink-secondary backdrop-blur">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
+            </span>
             Now booking experiences in the GTA
           </div>
-          <h1 className="mb-6 text-5xl font-extrabold leading-tight md:text-7xl">
+
+          <h1 className="mb-6 text-5xl font-extrabold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
             Hire a pro athlete
             <br />
             <span className="bg-hero-gradient bg-clip-text text-transparent">for the day.</span>
           </h1>
-          <p className="mx-auto mb-6 max-w-2xl text-lg text-ink-secondary">
-            Rent a real pro for a round of golf, a skate with your kids' team,
-            a private training session, or whatever you're into. Real stars, in person.
+
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
+            Rent a real professional for a round of golf, a skate with your kids' team, a
+            private training session, or whatever you're into. Real stars, in person.
           </p>
-          <div aria-hidden className="mb-8 flex justify-center gap-3 text-3xl md:text-4xl opacity-90">
-            <span>⛳</span>
-            <span>🏒</span>
-            <span>⚽</span>
-            <span>🏀</span>
-            <span>🎾</span>
-            <span>⚾</span>
+
+          {/* Sport pills */}
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+            {SPORT_CATEGORIES.map((s) => (
+              <span
+                key={s.name}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-ink-secondary backdrop-blur"
+              >
+                <span>{s.icon}</span>
+                {s.name}
+              </span>
+            ))}
           </div>
+
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/browse" className="btn-primary">Browse athletes →</Link>
-            <Link to="/login" className="btn-secondary">Become a pro</Link>
+            <Link to="/browse" className="btn-primary !px-7 !py-4 text-base shadow-2xl shadow-accent-primary/30">
+              Browse athletes →
+            </Link>
+            <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
+              Become a pro
+            </Link>
+          </div>
+
+          {/* Trust microcopy */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-ink-muted">
+            <span className="inline-flex items-center gap-1.5">✓ Verified pros only</span>
+            <span className="inline-flex items-center gap-1.5">✓ Secure payments</span>
+            <span className="inline-flex items-center gap-1.5">✓ 100% satisfaction guarantee</span>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <Stat label="Pro athletes" value={`${athletes.length}`} />
-          <Stat label="Experiences" value={`${totalExperiences}`} />
-          <Stat label="Bookings" value={`${completedBookings}`} />
-          <Stat label="Avg rating" value={`${avgRating}★`} />
+      {/* ============ PRESS BAR ============ */}
+      <section className="border-y border-white/5 bg-white/[0.02]">
+        <div className="mx-auto max-w-6xl px-6 py-8">
+          <div className="mb-4 text-center text-xs uppercase tracking-[0.2em] text-ink-muted">
+            As featured in
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 opacity-60">
+            {PRESS.map((p) => (
+              <div key={p} className="text-sm font-bold tracking-[0.25em] text-ink-secondary">
+                {p}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Featured athletes */}
+      {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
-        <div className="mb-6 flex items-end justify-between">
-          <div>
-            <h2 className="text-3xl font-bold">Featured pros</h2>
-            <p className="text-ink-muted">Top-rated athletes ready to book</p>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <Stat icon="🏆" label="Pro athletes" value={`${athletes.length}`} />
+          <Stat icon="⚡" label="Experiences" value={`${totalExperiences}`} />
+          <Stat icon="📅" label="Bookings" value={`${completedBookings}`} />
+          <Stat icon="⭐" label="Avg rating" value={`${avgRating}`} />
+        </div>
+      </section>
+
+      {/* ============ BROWSE BY SPORT ============ */}
+      <section className="mx-auto max-w-6xl px-6 pt-24">
+        <div className="mb-8 text-center">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
+            Browse by sport
           </div>
-          <Link to="/browse" className="text-sm font-semibold text-accent-primary hover:underline">
-            See all →
+          <h2 className="text-4xl font-extrabold tracking-tight">Pick your game</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {SPORT_CATEGORIES.map((s) => (
+            <Link
+              key={s.name}
+              to="/browse"
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 text-center transition hover:-translate-y-1 hover:border-white/30"
+            >
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-0 transition group-hover:opacity-20`}
+              />
+              <div className="relative">
+                <div className="mb-2 text-4xl">{s.icon}</div>
+                <div className="text-sm font-semibold">{s.name}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ FEATURED PROS ============ */}
+      <section className="mx-auto max-w-6xl px-6 pt-24">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
+              Top rated
+            </div>
+            <h2 className="text-4xl font-extrabold tracking-tight">Featured pros</h2>
+            <p className="mt-1 text-ink-muted">Bookable right now</p>
+          </div>
+          <Link
+            to="/browse"
+            className="hidden text-sm font-semibold text-accent-primary hover:underline sm:inline"
+          >
+            See all athletes →
           </Link>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -78,36 +202,115 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="mx-auto max-w-6xl px-6 pt-24">
-        <h2 className="mb-10 text-center text-3xl font-bold">How it works</h2>
+      {/* ============ HOW IT WORKS ============ */}
+      <section className="mx-auto max-w-6xl px-6 pt-28">
+        <div className="mb-12 text-center">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
+            How it works
+          </div>
+          <h2 className="text-4xl font-extrabold tracking-tight">From browse to booked in minutes</h2>
+        </div>
         <div className="grid gap-6 md:grid-cols-3">
-          <Step n="1" title="Pick a pro" body="Browse athletes by sport and find the experience you want." />
-          <Step n="2" title="Book a slot" body="Choose from their real availability and pay securely." />
-          <Step n="3" title="Show up & play" body="Chat directly to coordinate, then meet in person." />
+          <Step
+            n="1"
+            icon="🔍"
+            title="Pick a pro"
+            body="Browse athletes by sport, see their experiences, and find the perfect match."
+          />
+          <Step
+            n="2"
+            icon="📅"
+            title="Book a slot"
+            body="Choose from their real availability and pay securely. Done in 60 seconds."
+          />
+          <Step
+            n="3"
+            icon="🤝"
+            title="Show up & play"
+            body="Chat directly to coordinate the details, then meet your hero in person."
+          />
+        </div>
+      </section>
+
+      {/* ============ TESTIMONIALS ============ */}
+      <section className="mx-auto max-w-6xl px-6 pt-28">
+        <div className="mb-12 text-center">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
+            From real fans
+          </div>
+          <h2 className="text-4xl font-extrabold tracking-tight">Memories that don't fade</h2>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="card relative">
+              <div className="absolute -top-4 left-6 text-5xl text-accent-primary/40">"</div>
+              <p className="relative pt-3 text-sm leading-relaxed text-ink-secondary">{t.quote}</p>
+              <div className="mt-6 flex items-center gap-3 border-t border-white/5 pt-4">
+                <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
+                <div>
+                  <div className="text-sm font-semibold">{t.name}</div>
+                  <div className="text-xs text-ink-muted">{t.role}</div>
+                </div>
+                <div className="ml-auto text-warn">★★★★★</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ FINAL CTA ============ */}
+      <section className="mx-auto max-w-6xl px-6 pb-12 pt-28">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-card p-10 text-center md:p-16">
+          <div className="pointer-events-none absolute inset-0 -z-0">
+            <div className="absolute left-1/2 top-1/2 h-[400px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-primary/20 blur-[100px]" />
+          </div>
+          <div className="relative">
+            <h2 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl">
+              Ready to play with a star?
+            </h2>
+            <p className="mx-auto mb-8 max-w-xl text-ink-secondary">
+              Browse hundreds of experiences with verified pro athletes. Book in seconds.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link to="/browse" className="btn-primary !px-7 !py-4 text-base">
+                Find your athlete →
+              </Link>
+              <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
+                Become a pro
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="card text-center">
-      <div className="bg-hero-gradient bg-clip-text text-3xl font-extrabold text-transparent">{value}</div>
+      <div className="mb-1 text-2xl">{icon}</div>
+      <div className="bg-hero-gradient bg-clip-text text-3xl font-extrabold text-transparent md:text-4xl">
+        {value}
+      </div>
       <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
     </div>
   );
 }
 
-function Step({ n, title, body }: { n: string; title: string; body: string }) {
+function Step({ n, icon, title, body }: { n: string; icon: string; title: string; body: string }) {
   return (
-    <div className="card">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-hero-gradient text-sm font-bold">
+    <div className="card relative overflow-hidden">
+      <div className="absolute -right-4 -top-4 text-9xl font-extrabold leading-none text-white/[0.03]">
         {n}
       </div>
-      <div className="mb-1 text-lg font-semibold">{title}</div>
-      <div className="text-sm text-ink-muted">{body}</div>
+      <div className="relative">
+        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-2xl">
+          {icon}
+        </div>
+        <div className="mb-1 text-xl font-bold">{title}</div>
+        <div className="text-sm text-ink-muted">{body}</div>
+      </div>
     </div>
   );
 }

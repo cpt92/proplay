@@ -39,13 +39,26 @@ export default function Login() {
   };
 
   return (
-    <div className="mx-auto max-w-md px-6 py-16 animate-fade-in">
-      <h1 className="mb-2 text-center text-4xl font-extrabold">
-        {mode === 'signup' ? 'Join PlayWithAStar' : 'Welcome back'}
-      </h1>
-      <p className="mb-8 text-center text-ink-muted">
-        {mode === 'signup' ? 'Sign up as a fan or a pro athlete.' : 'Sign in to your account.'}
-      </p>
+    <div className="relative animate-fade-in">
+      {/* Background glow */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-accent-primary/15 blur-[120px]" />
+      </div>
+
+      <div className="mx-auto max-w-md px-6 py-20">
+        <div className="mb-8 text-center">
+          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-card text-3xl shadow-2xl">
+            ⭐
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight">
+            {mode === 'signup' ? 'Join PlayWithAStar' : 'Welcome back'}
+          </h1>
+          <p className="mt-2 text-ink-muted">
+            {mode === 'signup'
+              ? 'Sign up as a fan or a pro athlete.'
+              : 'Sign in to your account.'}
+          </p>
+        </div>
 
       {/* Role tabs (only for signup) */}
       {mode === 'signup' && (
@@ -118,9 +131,10 @@ export default function Login() {
         </div>
       </form>
 
-      <p className="mt-4 text-center text-xs text-ink-muted">
-        Mock auth — accounts are stored in your browser's localStorage. No server, no real passwords.
-      </p>
+        <p className="mt-4 text-center text-xs text-ink-muted">
+          Mock auth — accounts are stored in your browser's localStorage. No real passwords yet.
+        </p>
+      </div>
     </div>
   );
 }
