@@ -19,6 +19,8 @@ import { useAthletesStore } from '../store/useAthletesStore';
 import { useBookingsStore } from '../store/useBookingsStore';
 import { useReviewsStore } from '../store/useReviewsStore';
 import AthleteCard from '../components/AthleteCard';
+import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
+import { useCountUp } from '../hooks/useCountUp';
 
 type IconType = ComponentType<{ className?: string }>;
 
@@ -59,6 +61,7 @@ const PRESS = ['THE ATHLETIC', 'TSN', 'ESPN', 'SPORTSNET', 'BLEACHER REPORT'];
 
 export default function Home() {
   const athletes = useAthletesStore((s) => s.athletes);
+  const athletesLoaded = useAthletesStore((s) => s.loaded);
   const bookings = useBookingsStore((s) => s.bookings);
   const reviews = useReviewsStore((s) => s.reviews);
 
@@ -76,11 +79,17 @@ export default function Home() {
     <div className="animate-fade-in">
       {/* ============ HERO ============ */}
       <section className="relative overflow-hidden">
-        {/* Background mesh gradient */}
+        {/* Background mesh gradient — slowly drifts over time */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-accent-primary/30 blur-[120px]" />
-          <div className="absolute -top-20 left-1/4 h-[500px] w-[700px] rounded-full bg-accent-tertiary/20 blur-[120px]" />
-          <div className="absolute -top-20 right-1/4 h-[500px] w-[700px] rounded-full bg-accent-secondary/20 blur-[120px]" />
+          <div className="absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 animate-gradient-drift rounded-full bg-accent-primary/30 blur-[120px]" />
+          <div
+            className="absolute -top-20 left-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-tertiary/20 blur-[120px]"
+            style={{ animationDelay: '-7s' }}
+          />
+          <div
+            className="absolute -top-20 right-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-secondary/20 blur-[120px]"
+            style={{ animationDelay: '-14s' }}
+          />
         </div>
         {/* Subtle grid */}
         <div
@@ -101,7 +110,7 @@ export default function Home() {
             Now booking experiences in the GTA
           </div>
 
-          <h1 className="mb-6 text-5xl font-extrabold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
+          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
             Hire a pro athlete
             <br />
             <span className="bg-hero-gradient bg-clip-text text-transparent">for the day.</span>
@@ -162,10 +171,15 @@ export default function Home() {
       {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <Stat Icon={FaTrophy} label="Pro athletes" value={`${athletes.length}`} />
-          <Stat Icon={FaBoltLightning} label="Experiences" value={`${totalExperiences}`} />
-          <Stat Icon={FaCalendarDays} label="Bookings" value={`${completedBookings}`} />
-          <Stat Icon={FaStar} label="Avg rating" value={`${avgRating}`} />
+          <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
+          <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
+          <StatNumber Icon={FaCalendarDays} label="Bookings" target={completedBookings} />
+          <StatNumber
+            Icon={FaStar}
+            label="Avg rating"
+            target={Number(avgRating)}
+            decimals={1}
+          />
         </div>
       </section>
 
@@ -216,9 +230,9 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((a) => (
-            <AthleteCard key={a.id} athlete={a} />
-          ))}
+          {!athletesLoaded
+            ? Array.from({ length: 4 }).map((_, i) => <AthleteCardSkeleton key={i} />)
+            : featured.map((a) => <AthleteCard key={a.id} athlete={a} />)}
         </div>
       </section>
 
@@ -310,14 +324,26 @@ export default function Home() {
   );
 }
 
-function Stat({ Icon, label, value }: { Icon: IconType; label: string; value: string }) {
+function StatNumber({
+  Icon,
+  label,
+  target,
+  decimals = 0,
+}: {
+  Icon: IconType;
+  label: string;
+  target: number;
+  decimals?: number;
+}) {
+  const value = useCountUp(target, 1400);
+  const display = value.toFixed(decimals);
   return (
     <div className="card text-center">
       <div className="mb-2 flex justify-center">
         <Icon className="h-6 w-6 text-accent-primary" />
       </div>
-      <div className="bg-hero-gradient bg-clip-text text-3xl font-extrabold text-transparent md:text-4xl">
-        {value}
+      <div className="bg-hero-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
+        {display}
       </div>
       <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
     </div>

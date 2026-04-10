@@ -3,6 +3,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
 import { minPrice } from '../lib/types';
 import AthleteCard from '../components/AthleteCard';
+import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
 
 const SPORTS = ['All', 'Hockey', 'Tennis', 'Baseball', 'Basketball', 'Soccer', 'Football', 'Gymnastics', 'Esports'];
 const CATEGORIES = ['All', 'Golf', 'Skating', 'Training', 'Other'] as const;
@@ -16,6 +17,7 @@ type Sort = (typeof SORTS)[number]['value'];
 
 export default function Browse() {
   const athletes = useAthletesStore((s) => s.athletes);
+  const loaded = useAthletesStore((s) => s.loaded);
   const [query, setQuery] = useState('');
   const [sport, setSport] = useState('All');
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>('All');
@@ -165,7 +167,13 @@ export default function Browse() {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {!loaded ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <AthleteCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="card py-16 text-center">
             <div className="mb-3 flex justify-center">
               <FaMagnifyingGlass className="h-12 w-12 text-ink-muted" />
