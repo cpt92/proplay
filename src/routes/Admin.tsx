@@ -36,6 +36,8 @@ type StripePayment = {
 type StripeSummary = {
   totalCents: number;
   totalDollars: number;
+  grossDollars: number;
+  refundedDollars: number;
   succeededCount: number;
   refundedCount: number;
   failedCount: number;
@@ -162,11 +164,11 @@ export default function Admin() {
       <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi
           icon={<FaCreditCard />}
-          label="Stripe revenue (recent)"
+          label="Stripe net revenue"
           value={stripeSummary ? `$${stripeSummary.totalDollars.toFixed(2)}` : stripeLoading ? '…' : '—'}
           sub={
             stripeSummary
-              ? `${stripeSummary.succeededCount} succeeded · ${stripeSummary.refundedCount} refunded`
+              ? `$${stripeSummary.grossDollars.toFixed(0)} gross · $${stripeSummary.refundedDollars.toFixed(0)} refunded`
               : ''
           }
         />

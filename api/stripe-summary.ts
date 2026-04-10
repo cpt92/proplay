@@ -13,22 +13,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const stripe = new Stripe(secret);
 
-    // Pull the last 50 payment intents (most recent first)
-    const intents = await stripe.paymentIntents.list({ limit: 50 });
+    // Pull the last 50 payment intents and refunds in parallel
+    const [intents, refunds] = await Promise.all([
+      stripe.paymentIntents.list({ limit: 50 }),
+      stripe.refunds.list({ limit: 50 }),
+    ]);
 
-    let totalCents = 0;
+    // Map refunds by the PaymentIntent they belong to, summing partial refunds
+    const refundedByIntent = new Map<string, number>();
+    for (const r of refunds.data) {
+      const pi = r.payment_intent as string | null;
+      if (!pi) continue;
+      refundedByIntent.set(pi, (refundedByIntent.get(pi) ?? 0) + r.amount);
+    }
+
+    let grossCents = 0;
+    let refundedCents = 0;
     let succeededCount = 0;
     let refundedCount = 0;
     let failedCount = 0;
 
     const payments = intents.data.map((pi) => {
+      const refundAmount = refundedByIntent.get(pi.id) ?? 0;
+      const isRefunded = refundAmount > 0;
+
       if (pi.status === 'succeeded') {
         succeededCount += 1;
-        totalCents += pi.amount_received ?? pi.amount;
+        grossCents += pi.amount_received ?? pi.amount;
+      }
+      if (isRefunded) {
+        refundedCount += 1;
+        refundedCents += refundAmount;
       }
       if (pi.status === 'canceled') failedCount += 1;
-      // Note: refunds are tracked separately on charges, but we can detect refunded PIs
-      // via amount_received < amount or via the latest_charge.refunded flag.
 
       return {
         id: pi.id,
@@ -39,28 +56,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         created: pi.created,
         athleteName: (pi.metadata?.athleteName as string) ?? null,
         experienceTitle: (pi.metadata?.experienceTitle as string) ?? null,
+        refunded: isRefunded,
       };
     });
 
-    // Pull recent refunds separately
-    const refunds = await stripe.refunds.list({ limit: 50 });
-    refundedCount = refunds.data.length;
-    const refundedPaymentIds = new Set(refunds.data.map((r) => r.payment_intent as string));
-
-    const paymentsAnnotated = payments.map((p) => ({
-      ...p,
-      refunded: refundedPaymentIds.has(p.id),
-    }));
+    const netCents = grossCents - refundedCents;
 
     return res.status(200).json({
       summary: {
-        totalCents,
-        totalDollars: totalCents / 100,
+        totalCents: netCents,
+        totalDollars: netCents / 100,
+        grossDollars: grossCents / 100,
+        refundedDollars: refundedCents / 100,
         succeededCount,
         refundedCount,
         failedCount,
       },
-      payments: paymentsAnnotated,
+      payments,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
