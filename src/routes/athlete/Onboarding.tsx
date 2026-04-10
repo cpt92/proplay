@@ -2,25 +2,24 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useAthletesStore } from '../../store/useAthletesStore';
-import type { Experience } from '../../lib/seed';
+import type { Experience } from '../../lib/types';
 
 const STEPS = ['Profile', 'Career', 'First experience', 'Availability'] as const;
 const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#22d3ee', '#10b981', '#f59e0b', '#ef4444', '#1e3a8a'];
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
-  const linkAthleteId = useAuthStore((s) => s.linkAthleteId);
+  const profile = useAuthStore((s) => s.profile);
+  const setAthleteId = useAuthStore((s) => s.setAthleteId);
   const createAthlete = useAthletesStore((s) => s.createAthlete);
   const addExperience = useAthletesStore((s) => s.addExperience);
-  const setAvailability = useAthletesStore((s) => s.setAvailability);
+  const setInitialAvailability = useAthletesStore((s) => s.setInitialAvailability);
 
   const [step, setStep] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
 
   // Profile
-  const [name, setName] = useState(user?.name ?? '');
+  const [name, setName] = useState(profile?.name ?? '');
   const [sport, setSport] = useState('Hockey');
   const [position, setPosition] = useState('');
   const [team, setTeam] = useState('');
@@ -81,8 +80,9 @@ export default function Onboarding() {
     return true;
   };
 
-  const finish = () => {
-    if (!user) return;
+  const finish = async () => {
+    if (!profile || submitting) return;
+    setSubmitting(true);
     const initials = name
       .split(' ')
       .map((p) => p[0])
@@ -90,7 +90,7 @@ export default function Onboarding() {
       .join('')
       .toUpperCase();
 
-    const athlete = createAthlete({
+    const athlete = await createAthlete({
       name,
       sport,
       position,
@@ -108,10 +108,15 @@ export default function Onboarding() {
         championships: championships || undefined,
       },
       tags: [sport.toLowerCase()],
-      ownerUserId: user.id,
+      ownerUserId: profile.id,
     });
+    if (!athlete) {
+      setSubmitting(false);
+      alert('Could not create athlete profile. Please try again.');
+      return;
+    }
 
-    addExperience(athlete.id, {
+    await addExperience(athlete.id, {
       title: expTitle,
       description: expDesc,
       category: expCategory,
@@ -120,16 +125,17 @@ export default function Onboarding() {
       active: true,
     });
 
-    setAvailability(athlete.id, selectedDates);
-    linkAthleteId(athlete.id);
+    await setInitialAvailability(athlete.id, selectedDates);
+    await setAthleteId(athlete.id);
+    setSubmitting(false);
     navigate('/athlete/dashboard');
   };
 
-  if (!user) return null;
+  if (!profile) return null;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10 animate-fade-in">
-      <h1 className="mb-2 text-3xl font-extrabold">Welcome, {user.name.split(' ')[0]}</h1>
+      <h1 className="mb-2 text-3xl font-extrabold">Welcome, {profile.name.split(' ')[0]}</h1>
       <p className="mb-6 text-ink-muted">Let's set up your athlete profile in 4 quick steps.</p>
 
       {/* Progress */}

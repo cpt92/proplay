@@ -1,7 +1,12 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa6';
+import { useAuthStore } from './store/useAuthStore';
 import { useAthletesStore } from './store/useAthletesStore';
+import { useBookingsStore } from './store/useBookingsStore';
+import { useChatStore } from './store/useChatStore';
+import { useReviewsStore } from './store/useReviewsStore';
+import { useFavoritesStore } from './store/useFavoritesStore';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import RequireAuth from './components/RequireAuth';
@@ -9,7 +14,6 @@ import ToastHost from './components/ToastHost';
 import ScrollToTop from './components/ScrollToTop';
 import PageLoader from './components/PageLoader';
 
-// Lazy-loaded routes — each becomes its own JS chunk so the initial load is small.
 const Home = lazy(() => import('./routes/Home'));
 const Browse = lazy(() => import('./routes/Browse'));
 const AthleteProfile = lazy(() => import('./routes/AthleteProfile'));
@@ -46,10 +50,47 @@ function NotFound() {
 }
 
 export default function App() {
-  const refreshSeedAvailability = useAthletesStore((s) => s.refreshSeedAvailability);
+  const initAuth = useAuthStore((s) => s.init);
+  const profile = useAuthStore((s) => s.profile);
+  const loadAthletes = useAthletesStore((s) => s.load);
+  const loadBookings = useBookingsStore((s) => s.loadForUser);
+  const clearBookings = useBookingsStore((s) => s.clear);
+  const loadMessages = useChatStore((s) => s.loadForUser);
+  const subscribeChat = useChatStore((s) => s.subscribe);
+  const clearChat = useChatStore((s) => s.clear);
+  const loadReviews = useReviewsStore((s) => s.load);
+  const loadFavorites = useFavoritesStore((s) => s.loadForUser);
+  const clearFavorites = useFavoritesStore((s) => s.clear);
+
+  // Bootstrap: load auth + public data on mount
   useEffect(() => {
-    refreshSeedAvailability();
-  }, [refreshSeedAvailability]);
+    initAuth();
+    loadAthletes();
+    loadReviews();
+  }, [initAuth, loadAthletes, loadReviews]);
+
+  // Load user-scoped data when the user logs in / out
+  useEffect(() => {
+    if (profile?.id) {
+      loadBookings(profile.id);
+      loadMessages(profile.id);
+      subscribeChat();
+      loadFavorites(profile.id);
+    } else {
+      clearBookings();
+      clearChat();
+      clearFavorites();
+    }
+  }, [
+    profile?.id,
+    loadBookings,
+    loadMessages,
+    subscribeChat,
+    loadFavorites,
+    clearBookings,
+    clearChat,
+    clearFavorites,
+  ]);
 
   return (
     <BrowserRouter>

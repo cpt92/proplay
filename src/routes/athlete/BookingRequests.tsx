@@ -15,8 +15,8 @@ const STATUS_STYLE: Record<BookingStatus, string> = {
 };
 
 export default function BookingRequests() {
-  const userId = useAuthStore((s) => s.currentUserId);
-  const athlete = useAthletesStore((s) => (userId ? s.getByOwner(userId) : undefined));
+  const profile = useAuthStore((s) => s.profile);
+  const athlete = useAthletesStore((s) => (profile ? s.getByOwner(profile.id) : undefined));
   const allBookings = useBookingsStore((s) => s.bookings);
   const bookings = useMemo(
     () => (athlete ? allBookings.filter((b) => b.athleteId === athlete.id) : []),

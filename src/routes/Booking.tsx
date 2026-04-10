@@ -25,10 +25,8 @@ const STEPS = ['Review', 'Pick a date', 'Pick a time', 'Checkout'] as const;
 export default function Booking() {
   const { athleteId, expId } = useParams();
   const navigate = useNavigate();
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
-  const athlete = useAthletesStore((s) => s.getById(Number(athleteId)));
+  const user = useAuthStore((s) => s.profile);
+  const athlete = useAthletesStore((s) => (athleteId ? s.getById(athleteId) : undefined));
   const createBooking = useBookingsStore((s) => s.create);
 
   const [step, setStep] = useState(0);
@@ -103,9 +101,9 @@ export default function Booking() {
   const avail = athlete.availability ?? {};
   const today = new Date();
 
-  const finishBooking = (paymentRef: string) => {
+  const finishBooking = async (paymentRef: string) => {
     if (!date || !time) return;
-    const booking = createBooking({
+    const booking = await createBooking({
       fanId: user.id,
       fanName: user.name,
       athleteId: athlete.id,
@@ -116,6 +114,10 @@ export default function Booking() {
       total: exp.price,
       paymentRef,
     });
+    if (!booking) {
+      toast.error('Could not save booking. Please contact support.');
+      return;
+    }
     toast.success('Payment successful — booking sent to athlete!');
     navigate(`/book/confirmation/${booking.id}`);
   };

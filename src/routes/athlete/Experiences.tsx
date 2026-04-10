@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useAthletesStore } from '../../store/useAthletesStore';
-import type { Experience } from '../../lib/seed';
+import type { Experience } from '../../lib/types';
 
 type Draft = {
   id?: string;
@@ -16,8 +16,8 @@ type Draft = {
 const empty: Draft = { title: '', description: '', category: 'Training', duration: '60 min', price: 200, active: true };
 
 export default function Experiences() {
-  const userId = useAuthStore((s) => s.currentUserId);
-  const athlete = useAthletesStore((s) => (userId ? s.getByOwner(userId) : undefined));
+  const profile = useAuthStore((s) => s.profile);
+  const athlete = useAthletesStore((s) => (profile ? s.getByOwner(profile.id) : undefined));
   const addExperience = useAthletesStore((s) => s.addExperience);
   const updateExperience = useAthletesStore((s) => s.updateExperience);
   const deleteExperience = useAthletesStore((s) => s.deleteExperience);

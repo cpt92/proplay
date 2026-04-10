@@ -18,9 +18,7 @@ const STATUS_STYLE: Record<BookingStatus, string> = {
 type Tab = 'upcoming' | 'past' | 'cancelled';
 
 export default function MyBookings() {
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
+  const user = useAuthStore((s) => s.profile);
   const allBookings = useBookingsStore((s) => s.bookings);
   const bookings = useMemo(
     () => (user ? allBookings.filter((b) => b.fanId === user.id) : []),

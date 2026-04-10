@@ -1,5 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthStore, type Role } from '../store/useAuthStore';
+import { useAuthStore } from '../store/useAuthStore';
+import type { Role } from '../lib/types';
+import PageLoader from './PageLoader';
 
 export default function RequireAuth({
   role,
@@ -9,11 +11,16 @@ export default function RequireAuth({
   children: React.ReactNode;
 }) {
   const location = useLocation();
-  const user = useAuthStore((s) => (s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null));
-  if (!user) {
+  const profile = useAuthStore((s) => s.profile);
+  const initialized = useAuthStore((s) => s.initialized);
+
+  // Wait for auth initialization before redirecting
+  if (!initialized) return <PageLoader />;
+
+  if (!profile) {
     const next = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/login?next=${next}`} replace />;
   }
-  if (role && user.role !== role) return <Navigate to="/" replace />;
+  if (role && profile.role !== role) return <Navigate to="/" replace />;
   return <>{children}</>;
 }

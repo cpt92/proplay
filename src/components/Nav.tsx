@@ -9,36 +9,34 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 
 export default function Nav() {
   const navigate = useNavigate();
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
+  const profile = useAuthStore((s) => s.profile);
   const logout = useAuthStore((s) => s.logout);
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setOpen(false);
     navigate('/');
   };
   const close = () => setOpen(false);
 
-  const isAdmin = user?.email.toLowerCase().startsWith('admin@');
+  const isAdmin = profile?.email.toLowerCase().startsWith('admin@');
 
   const links = (
     <>
       <NavLink to="/" end className={linkClass} onClick={close}>Home</NavLink>
       <NavLink to="/browse" className={linkClass} onClick={close}>Browse Athletes</NavLink>
-      {user?.role === 'athlete' && (
+      {profile?.role === 'athlete' && (
         <NavLink to="/athlete/dashboard" className={linkClass} onClick={close}>My Dashboard</NavLink>
       )}
-      {user?.role === 'fan' && (
+      {profile?.role === 'fan' && (
         <>
           <NavLink to="/fan/bookings" className={linkClass} onClick={close}>My Bookings</NavLink>
           <NavLink to="/favorites" className={linkClass} onClick={close}>Favorites</NavLink>
         </>
       )}
-      {!user && <NavLink to="/favorites" className={linkClass} onClick={close}>Favorites</NavLink>}
-      {user && (
+      {!profile && <NavLink to="/favorites" className={linkClass} onClick={close}>Favorites</NavLink>}
+      {profile && (
         <NavLink to="/messages" className={linkClass} onClick={close}>Messages</NavLink>
       )}
       {isAdmin && (
@@ -57,16 +55,14 @@ export default function Nav() {
           <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden items-center gap-6 md:flex">{links}</nav>
 
-        {/* Right cluster */}
         <div className="flex items-center gap-2">
-          {user ? (
+          {profile ? (
             <>
               <div className="hidden text-right text-xs sm:block">
-                <div className="font-semibold text-ink-primary">{user.name}</div>
-                <div className="capitalize text-ink-muted">{user.role}</div>
+                <div className="font-semibold text-ink-primary">{profile.name}</div>
+                <div className="capitalize text-ink-muted">{profile.role}</div>
               </div>
               <button onClick={handleLogout} className="btn-secondary !px-4 !py-2 text-sm">
                 Sign out
@@ -86,7 +82,6 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <nav className="border-t border-white/5 bg-bg-primary px-6 py-4 md:hidden">
           <div className="flex flex-col gap-3">{links}</div>

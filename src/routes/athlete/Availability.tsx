@@ -6,8 +6,8 @@ import { useAthletesStore } from '../../store/useAthletesStore';
 const TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
 
 export default function Availability() {
-  const userId = useAuthStore((s) => s.currentUserId);
-  const athlete = useAthletesStore((s) => (userId ? s.getByOwner(userId) : undefined));
+  const profile = useAuthStore((s) => s.profile);
+  const athlete = useAthletesStore((s) => (profile ? s.getByOwner(profile.id) : undefined));
   const toggleSlot = useAthletesStore((s) => s.toggleSlot);
 
   const [month, setMonth] = useState(() => startOfMonth(new Date()));

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useAuthStore } from '../store/useAuthStore';
@@ -5,16 +6,35 @@ import { useAthletesStore } from '../store/useAthletesStore';
 import { useBookingsStore } from '../store/useBookingsStore';
 import { useChatStore } from '../store/useChatStore';
 import { useReviewsStore } from '../store/useReviewsStore';
+import { supabase } from '../lib/supabase';
+import type { Profile } from '../lib/types';
 
 export default function Admin() {
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
-  const users = useAuthStore((s) => s.users);
+  const user = useAuthStore((s) => s.profile);
   const athletes = useAthletesStore((s) => s.athletes);
   const bookings = useBookingsStore((s) => s.bookings);
   const messages = useChatStore((s) => s.messages);
   const reviews = useReviewsStore((s) => s.reviews);
+  const [users, setUsers] = useState<Profile[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, role, name, email, athlete_id, created_at')
+        .order('created_at', { ascending: false });
+      setUsers(
+        (data ?? []).map((r: Record<string, unknown>) => ({
+          id: r.id as string,
+          role: r.role as Profile['role'],
+          name: r.name as string,
+          email: r.email as string,
+          athleteId: (r.athlete_id as string) ?? null,
+          createdAt: r.created_at as string,
+        }))
+      );
+    })();
+  }, []);
 
   if (!user || !user.email.toLowerCase().startsWith('admin@')) {
     return <Navigate to="/" replace />;

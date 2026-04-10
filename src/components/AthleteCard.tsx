@@ -1,19 +1,25 @@
 import { Link } from 'react-router-dom';
 import { FaStar, FaCircleCheck, FaHeart, FaRegHeart } from 'react-icons/fa6';
-import { type Athlete, minPrice } from '../lib/seed';
+import { type Athlete, minPrice } from '../lib/types';
 import { useFavoritesStore } from '../store/useFavoritesStore';
+import { useAuthStore } from '../store/useAuthStore';
 import { toast } from '../store/useToastStore';
 
 export default function AthleteCard({ athlete }: { athlete: Athlete }) {
   const price = minPrice(athlete);
+  const profile = useAuthStore((s) => s.profile);
   const favorites = useFavoritesStore((s) => s.favorites);
-  const toggle = useFavoritesStore((s) => s.toggle);
+  const toggleFav = useFavoritesStore((s) => s.toggle);
   const isFav = favorites.includes(athlete.id);
 
-  const handleFav = (e: React.MouseEvent) => {
+  const handleFav = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggle(athlete.id);
+    if (!profile) {
+      toast.info('Sign in to save favorites');
+      return;
+    }
+    await toggleFav(profile.id, athlete.id);
     toast.info(isFav ? 'Removed from favorites' : 'Saved to favorites');
   };
 

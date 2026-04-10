@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa6';
-import { useAuthStore, type Role } from '../store/useAuthStore';
+import { useAuthStore } from '../store/useAuthStore';
+import type { Role } from '../lib/types';
 import { toast } from '../store/useToastStore';
 
 type Mode = 'signin' | 'signup';
@@ -19,20 +20,25 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     if (mode === 'signup') {
       if (!name.trim()) return setError('Name is required.');
       if (!email.trim()) return setError('Email is required.');
-      if (password.length < 4) return setError('Password must be at least 4 characters.');
-      const result = signup({ role, name, email, password });
+      if (password.length < 6) return setError('Password must be at least 6 characters.');
+      setSubmitting(true);
+      const result = await signup({ role, name, email, password });
+      setSubmitting(false);
       if ('error' in result) return setError(result.error);
       toast.success(`Welcome to PlayWithAStar, ${result.name.split(' ')[0]}!`);
       navigate(next || (role === 'athlete' ? '/athlete/onboarding' : '/browse'));
     } else {
-      const result = login(email, password);
+      setSubmitting(true);
+      const result = await login(email, password);
+      setSubmitting(false);
       if ('error' in result) return setError(result.error);
       toast.success(`Welcome back, ${result.name.split(' ')[0]}!`);
       navigate(next || (result.role === 'athlete' ? '/athlete/dashboard' : '/browse'));
@@ -113,8 +119,8 @@ export default function Login() {
           <div className="rounded-lg border border-err/40 bg-err/10 p-3 text-sm text-err">{error}</div>
         )}
 
-        <button type="submit" className="btn-primary w-full">
-          {mode === 'signup' ? 'Create account' : 'Sign in'}
+        <button type="submit" className="btn-primary w-full disabled:opacity-50" disabled={submitting}>
+          {submitting ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}
         </button>
 
         <div className="text-center text-sm text-ink-muted">
@@ -133,7 +139,7 @@ export default function Login() {
       </form>
 
         <p className="mt-4 text-center text-xs text-ink-muted">
-          Mock auth — accounts are stored in your browser's localStorage. No real passwords yet.
+          Real accounts — secured by Supabase Auth. Test mode: no email verification needed.
         </p>
       </div>
     </div>

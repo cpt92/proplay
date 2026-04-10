@@ -5,9 +5,7 @@ import { useAthletesStore } from '../../store/useAthletesStore';
 import { useBookingsStore } from '../../store/useBookingsStore';
 
 export default function Dashboard() {
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
+  const user = useAuthStore((s) => s.profile);
   const athlete = useAthletesStore((s) => (user ? s.getByOwner(user.id) : undefined));
   const allBookings = useBookingsStore((s) => s.bookings);
   const bookings = useMemo(

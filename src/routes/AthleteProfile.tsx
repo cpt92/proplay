@@ -7,10 +7,8 @@ import { useReviewsStore } from '../store/useReviewsStore';
 
 export default function AthleteProfile() {
   const { id } = useParams();
-  const athleteId = Number(id);
+  const athleteId = id ?? '';
   const athlete = useAthletesStore((s) => s.getById(athleteId));
-  // Read the raw arrays from the store (stable references) and compute locally.
-  // Using selector functions that return fresh arrays causes infinite re-renders.
   const allReviews = useReviewsStore((s) => s.reviews);
   const reviews = useMemo(
     () =>

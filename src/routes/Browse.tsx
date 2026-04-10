@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
-import { minPrice } from '../lib/seed';
+import { minPrice } from '../lib/types';
 import AthleteCard from '../components/AthleteCard';
 
 const SPORTS = ['All', 'Hockey', 'Tennis', 'Baseball', 'Basketball', 'Soccer', 'Football', 'Gymnastics', 'Esports'];

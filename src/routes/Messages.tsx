@@ -8,9 +8,7 @@ import { useChatStore } from '../store/useChatStore';
 
 export default function Messages() {
   const [params, setParams] = useSearchParams();
-  const user = useAuthStore((s) =>
-    s.currentUserId ? s.users.find((u) => u.id === s.currentUserId) ?? null : null
-  );
+  const user = useAuthStore((s) => s.profile);
   const bookings = useBookingsStore((s) => s.bookings);
   const athletes = useAthletesStore((s) => s.athletes);
   const messages = useChatStore((s) => s.messages);
