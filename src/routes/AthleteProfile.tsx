@@ -67,7 +67,7 @@ export default function AthleteProfile() {
                 className="h-32 w-32 rounded-3xl border-4 border-white/20 object-cover shadow-2xl sm:h-40 sm:w-40"
               />
               {athlete.verified && (
-                <div className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-bg-primary bg-cyan text-bg-primary">
+                <div className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-bg-primary bg-info text-bg-primary">
                   <FaCheck className="h-4 w-4" />
                 </div>
               )}
