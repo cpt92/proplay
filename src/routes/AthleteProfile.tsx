@@ -76,7 +76,7 @@ export default function AthleteProfile() {
               <div className="mb-2 inline-block rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-secondary backdrop-blur">
                 {athlete.sport}
               </div>
-              <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">{athlete.name}</h1>
+              <h1 className="font-serif text-5xl font-black tracking-tight md:text-6xl">{athlete.name}</h1>
               <div className="mt-1 text-lg text-ink-secondary">{athlete.position}</div>
               <div className="mt-1 text-sm text-ink-muted">
                 {athlete.team} · {athlete.location}

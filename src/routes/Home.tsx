@@ -24,6 +24,8 @@ import { useReviewsStore } from '../store/useReviewsStore';
 import AthleteCard from '../components/AthleteCard';
 import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
 import { useCountUp } from '../hooks/useCountUp';
+import { useParallax } from '../hooks/useParallax';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 type IconType = ComponentType<{ className?: string }>;
 
@@ -75,92 +77,28 @@ export default function Home() {
   return (
     <div className="animate-fade-in">
       {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden">
-        {/* Background mesh gradient — slowly drifts over time */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 animate-gradient-drift rounded-full bg-accent-primary/30 blur-[120px]" />
-          <div
-            className="absolute -top-20 left-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-tertiary/20 blur-[120px]"
-            style={{ animationDelay: '-7s' }}
-          />
-          <div
-            className="absolute -top-20 right-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-secondary/20 blur-[120px]"
-            style={{ animationDelay: '-14s' }}
-          />
-        </div>
-        {/* Subtle grid */}
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-
-        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 text-center md:pt-32">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-ink-secondary backdrop-blur">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
-            </span>
-            Now booking experiences in the GTA
-          </div>
-
-          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
-            Hire a pro athlete
-            <br />
-            <span className="bg-accent-gradient bg-clip-text text-transparent">for the day.</span>
-          </h1>
-
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
-            Rent a real professional for a round of golf, a skate with your kids' team, a
-            private training session, or whatever you're into. Real stars, in person.
-          </p>
-
-          {/* Sport pills */}
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-            {SPORT_CATEGORIES.map(({ name, Icon }) => (
-              <span
-                key={name}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm text-ink-secondary backdrop-blur"
-              >
-                <Icon className="h-3.5 w-3.5 text-accent-primary" />
-                {name}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/browse" className="btn-primary !px-7 !py-4 text-base shadow-2xl shadow-accent-primary/30">
-              Browse athletes →
-            </Link>
-            <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
-              Become a pro
-            </Link>
-          </div>
-
-          {/* Trust microcopy */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-ink-muted">
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
-          <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
-          <StatNumber Icon={FaCalendarDays} label="Bookings" target={publicBookingCount} />
-          <StatNumber
-            Icon={FaStar}
-            label="Avg rating"
-            target={avgRatingNum}
-            decimals={1}
-          />
+          <RevealCard delayMs={0}>
+            <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
+          </RevealCard>
+          <RevealCard delayMs={80}>
+            <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
+          </RevealCard>
+          <RevealCard delayMs={160}>
+            <StatNumber Icon={FaCalendarDays} label="Bookings" target={publicBookingCount} />
+          </RevealCard>
+          <RevealCard delayMs={240}>
+            <StatNumber
+              Icon={FaStar}
+              label="Avg rating"
+              target={avgRatingNum}
+              decimals={1}
+            />
+          </RevealCard>
         </div>
       </section>
 
@@ -211,12 +149,16 @@ export default function Home() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {!athletesLoaded
             ? Array.from({ length: 4 }).map((_, i) => <AthleteCardSkeleton key={i} />)
-            : featured.map((a) => <AthleteCard key={a.id} athlete={a} />)}
+            : featured.map((a, i) => (
+                <RevealCard key={a.id} delayMs={i * 80}>
+                  <AthleteCard athlete={a} />
+                </RevealCard>
+              ))}
         </div>
       </section>
 
       {/* ============ HOW IT WORKS ============ */}
-      <section className="mx-auto max-w-6xl px-6 pt-28">
+      <section id="how-it-works" className="mx-auto max-w-6xl px-6 pt-28">
         <div className="mb-12 text-center">
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
             How it works
@@ -251,17 +193,21 @@ export default function Home() {
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
             Our promise
           </div>
-          <h2 className="text-4xl font-extrabold tracking-tight">Book with confidence</h2>
+          <h2 className="text-4xl font-extrabold tracking-tight md:text-5xl">
+            Book with <span className="font-serif italic font-black text-accent-primary">confidence</span>
+          </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {PROMISES.map(({ Icon, title, body }) => (
-            <div key={title} className="card relative overflow-hidden">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
-                <Icon className="h-5 w-5" />
+          {PROMISES.map(({ Icon, title, body }, i) => (
+            <RevealCard key={title} delayMs={i * 100}>
+              <div className="card relative overflow-hidden">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="mb-1 text-xl font-bold">{title}</div>
+                <div className="text-sm leading-relaxed text-ink-muted">{body}</div>
               </div>
-              <div className="mb-1 text-xl font-bold">{title}</div>
-              <div className="text-sm leading-relaxed text-ink-muted">{body}</div>
-            </div>
+            </RevealCard>
           ))}
         </div>
       </section>
@@ -312,10 +258,10 @@ function StatNumber({
       <div className="mb-2 flex justify-center">
         <Icon className="h-6 w-6 text-accent-primary" />
       </div>
-      <div className="bg-accent-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
+      <div className="bg-accent-gradient bg-clip-text font-serif text-5xl font-black leading-none text-transparent md:text-6xl">
         {display}
       </div>
-      <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
+      <div className="mt-3 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
     </div>
   );
 }
@@ -334,5 +280,96 @@ function Step({ n, Icon, title, body }: { n: string; Icon: IconType; title: stri
         <div className="text-sm text-ink-muted">{body}</div>
       </div>
     </div>
+  );
+}
+
+function RevealCard({
+  children,
+  delayMs = 0,
+  className = '',
+}: {
+  children: React.ReactNode;
+  delayMs?: number;
+  className?: string;
+}) {
+  const { ref, visible } = useRevealOnScroll<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delayMs}ms` }}
+      className={`transition-all duration-700 ease-out ${
+        visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function HeroSection() {
+  const parallaxRef = useParallax(0.18);
+  return (
+    <section className="relative overflow-hidden">
+      {/* Parallax photo background */}
+      <div ref={parallaxRef} className="pointer-events-none absolute inset-0 -z-20 h-[140%] will-change-transform">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/hero-arena.jpg')", backgroundColor: '#050a1a' }}
+        />
+      </div>
+      {/* Navy gradient overlay for legibility */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-bg-primary/55 via-bg-primary/75 to-bg-primary" />
+      {/* Crimson accent glow, top right */}
+      <div className="pointer-events-none absolute -right-32 -top-32 -z-10 h-[520px] w-[520px] rounded-full bg-accent-primary/15 blur-[140px]" />
+      {/* Noise grain */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-6 pb-28 pt-24 md:pb-32 md:pt-36">
+        <div className="max-w-3xl">
+          {/* Eyebrow */}
+          <div className="mb-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-accent-primary">
+            <span className="h-px w-8 bg-accent-primary" />
+            Elite experiences
+          </div>
+
+          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
+            Train with the
+            <br />
+            <span className="bg-accent-gradient bg-clip-text font-serif italic font-black text-transparent">
+              greatest ever.
+            </span>
+          </h1>
+
+          <p className="mb-10 max-w-xl text-lg text-ink-secondary md:text-xl">
+            Book one-on-one days with real pro athletes — private training, game tickets, meet-and-greets. Verified. Insured. Unforgettable.
+          </p>
+
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <Link
+              to="/browse"
+              className="btn-primary !px-7 !py-4 text-base shadow-2xl shadow-accent-primary/30"
+            >
+              Browse athletes →
+            </Link>
+            <a href="#how-it-works" className="btn-secondary !px-7 !py-4 text-base">
+              How it works
+            </a>
+          </div>
+
+          {/* Trust microcopy */}
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-ink-muted">
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

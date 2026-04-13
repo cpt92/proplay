@@ -83,7 +83,7 @@ export default function Dashboard() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="card text-center">
-      <div className="bg-accent-gradient bg-clip-text text-3xl font-extrabold text-transparent">{value}</div>
+      <div className="bg-accent-gradient bg-clip-text font-serif text-4xl font-black leading-none text-transparent md:text-5xl">{value}</div>
       <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
     </div>
   );

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useAthletesStore } from '../store/useAthletesStore';
+import { useBookingsStore } from '../store/useBookingsStore';
 import { minPrice } from '../lib/types';
+import { computeBrowseAggregates, formatResponseHours } from '../lib/browseAggregates';
 import AthleteCard from '../components/AthleteCard';
 import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
 
@@ -49,6 +51,9 @@ export default function Browse() {
       return pb - pa;
     });
   }, [athletes, query, sport, category, maxPrice, sort]);
+
+  const allBookings = useBookingsStore((s) => s.bookings);
+  const aggregates = computeBrowseAggregates(filtered, allBookings);
 
   const reset = () => {
     setQuery('');
@@ -132,11 +137,46 @@ export default function Browse() {
           </div>
         </div>
 
-        {/* Result count + active filter chips */}
+        {/* Result count + aggregates + active filter chips */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="text-sm text-ink-muted">
-            <span className="font-bold text-ink-primary">{filtered.length}</span>{' '}
-            {filtered.length === 1 ? 'athlete' : 'athletes'} found
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted">
+            <div>
+              <span className="font-bold text-ink-primary">{filtered.length}</span>{' '}
+              {filtered.length === 1 ? 'athlete' : 'athletes'}
+            </div>
+            {aggregates.avgResponseHours !== null && (
+              <div className="inline-flex items-center gap-1">
+                <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
+                <span>
+                  Avg response{' '}
+                  <span className="font-semibold text-ink-secondary">
+                    {formatResponseHours(aggregates.avgResponseHours)}
+                  </span>
+                </span>
+              </div>
+            )}
+            {aggregates.avgRating !== null && (
+              <div className="inline-flex items-center gap-1">
+                <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
+                <span>
+                  Avg rating{' '}
+                  <span className="font-semibold text-ink-secondary">
+                    {aggregates.avgRating.toFixed(1)}
+                  </span>
+                </span>
+              </div>
+            )}
+            {aggregates.bookingsThisMonth !== null && (
+              <div className="inline-flex items-center gap-1">
+                <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
+                <span>
+                  <span className="font-semibold text-ink-secondary">
+                    {aggregates.bookingsThisMonth}
+                  </span>{' '}
+                  booked this month
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             {sport !== 'All' && (

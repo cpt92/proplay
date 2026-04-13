@@ -39,7 +39,7 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
   return (
     <Link
       to={`/athletes/${athlete.id}`}
-      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent-primary/50 hover:shadow-2xl hover:shadow-accent-primary/20"
+      className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-card shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] transition duration-300 hover:-translate-y-1 hover:border-accent-primary/50 hover:shadow-[0_32px_80px_-24px_rgba(230,57,70,0.35)]"
     >
       {/* Image */}
       <div className="relative aspect-[4/5] w-full overflow-hidden">
@@ -49,11 +49,16 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
+        {/* Inset frame */}
+        <div className="pointer-events-none absolute inset-2 rounded-xl ring-1 ring-inset ring-white/10" />
+        {/* Readability gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
+        {/* Crimson hover wash */}
         <div
-          className="absolute inset-0 opacity-0 transition group-hover:opacity-100"
+          className="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
           style={{
-            background: `linear-gradient(180deg, transparent 50%, ${athlete.color}40 100%)`,
+            background: 'linear-gradient(180deg, transparent 40%, rgba(230,57,70,0.3) 100%)',
+            mixBlendMode: 'multiply',
           }}
         />
 
@@ -100,7 +105,7 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
       </div>
 
       {/* Bottom card */}
-      <div className="flex items-center justify-between border-t border-white/5 px-4 py-3">
+      <div className="flex items-center justify-between border-t border-white/10 bg-bg-secondary/60 px-4 py-3">
         <div className="flex items-center gap-1.5 text-sm">
           <FaStar className="h-3.5 w-3.5 text-warn" />
           <span className="font-bold text-ink-primary">{athlete.rating}</span>

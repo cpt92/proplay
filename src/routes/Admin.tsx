@@ -410,7 +410,7 @@ function Kpi({
         <div className="text-xs uppercase tracking-wide text-ink-muted">{label}</div>
         <div className="text-accent-primary">{icon}</div>
       </div>
-      <div className="bg-accent-gradient bg-clip-text text-3xl font-extrabold text-transparent">
+      <div className="bg-accent-gradient bg-clip-text font-serif text-4xl font-black leading-none text-transparent md:text-5xl">
         {value}
       </div>
       {sub && <div className="mt-1 text-xs text-ink-muted">{sub}</div>}
