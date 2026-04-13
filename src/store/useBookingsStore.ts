@@ -8,10 +8,12 @@ type State = {
   bookings: Booking[];
   loaded: boolean;
   loadingFor: string | null; // userId currently loaded for
+  publicCompletedCount: number;
 };
 
 type Actions = {
   loadForUser: (userId: string) => Promise<void>;
+  loadPublicCompletedCount: () => Promise<void>;
   clear: () => void;
   create: (input: Omit<Booking, 'id' | 'status' | 'createdAt'>) => Promise<Booking | null>;
   setStatus: (id: string, status: BookingStatus) => Promise<void>;
@@ -39,6 +41,16 @@ export const useBookingsStore = create<State & Actions>((set, get) => ({
   bookings: [],
   loaded: false,
   loadingFor: null,
+  publicCompletedCount: 0,
+
+  loadPublicCompletedCount: async () => {
+    const { data, error } = await supabase.rpc('public_completed_booking_count');
+    if (error) {
+      console.error('load public booking count error', error);
+      return;
+    }
+    set({ publicCompletedCount: Number(data ?? 0) });
+  },
 
   loadForUser: async (userId) => {
     if (get().loadingFor === userId && get().loaded) return;

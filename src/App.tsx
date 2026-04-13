@@ -54,6 +54,7 @@ export default function App() {
   const profile = useAuthStore((s) => s.profile);
   const loadAthletes = useAthletesStore((s) => s.load);
   const loadBookings = useBookingsStore((s) => s.loadForUser);
+  const loadPublicBookingCount = useBookingsStore((s) => s.loadPublicCompletedCount);
   const clearBookings = useBookingsStore((s) => s.clear);
   const loadMessages = useChatStore((s) => s.loadForUser);
   const subscribeChat = useChatStore((s) => s.subscribe);
@@ -67,7 +68,8 @@ export default function App() {
     initAuth();
     loadAthletes();
     loadReviews();
-  }, [initAuth, loadAthletes, loadReviews]);
+    loadPublicBookingCount();
+  }, [initAuth, loadAthletes, loadReviews, loadPublicBookingCount]);
 
   // Load user-scoped data when the user logs in / out
   useEffect(() => {

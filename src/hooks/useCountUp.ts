@@ -6,8 +6,8 @@ export function useCountUp(target: number, duration = 1500): number {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (target === 0) {
-      setValue(0);
+    if (!Number.isFinite(target) || target === 0) {
+      setValue(Number.isFinite(target) ? target : 0);
       return;
     }
     let startTime: number | null = null;

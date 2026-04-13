@@ -62,18 +62,20 @@ const PRESS = ['THE ATHLETIC', 'TSN', 'ESPN', 'SPORTSNET', 'BLEACHER REPORT'];
 export default function Home() {
   const athletes = useAthletesStore((s) => s.athletes);
   const athletesLoaded = useAthletesStore((s) => s.loaded);
-  const bookings = useBookingsStore((s) => s.bookings);
   const reviews = useReviewsStore((s) => s.reviews);
+  const publicBookingCount = useBookingsStore((s) => s.publicCompletedCount);
 
   const featured = [...athletes].sort((a, b) => b.rating - a.rating).slice(0, 4);
   const totalExperiences = athletes.reduce((acc, a) => acc + a.experiences.length, 0);
-  const completedBookings = bookings.filter(
-    (b) => b.status === 'completed' || b.status === 'confirmed'
-  ).length;
-  const avgRating =
-    reviews.length > 0
-      ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
-      : (athletes.reduce((a, b) => a + b.rating, 0) / athletes.length).toFixed(1);
+
+  const ratedAthletes = athletes.filter((a) => a.rating > 0);
+  const avgFromReviews =
+    reviews.length > 0 ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length : null;
+  const avgFromAthletes =
+    ratedAthletes.length > 0
+      ? ratedAthletes.reduce((a, b) => a + b.rating, 0) / ratedAthletes.length
+      : null;
+  const avgRatingNum = avgFromReviews ?? avgFromAthletes ?? 0;
 
   return (
     <div className="animate-fade-in">
@@ -173,11 +175,11 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
           <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
-          <StatNumber Icon={FaCalendarDays} label="Bookings" target={completedBookings} />
+          <StatNumber Icon={FaCalendarDays} label="Bookings" target={publicBookingCount} />
           <StatNumber
             Icon={FaStar}
             label="Avg rating"
-            target={Number(avgRating)}
+            target={avgRatingNum}
             decimals={1}
           />
         </div>
