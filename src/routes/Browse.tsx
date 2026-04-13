@@ -145,7 +145,7 @@ export default function Browse() {
               {filtered.length === 1 ? 'athlete' : 'athletes'}
             </div>
             {aggregates.avgResponseHours !== null && (
-              <div className="hidden items-center gap-1 md:inline-flex">
+              <div className="inline-flex items-center gap-1">
                 <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
                 <span>
                   Avg response{' '}
@@ -156,7 +156,7 @@ export default function Browse() {
               </div>
             )}
             {aggregates.avgRating !== null && (
-              <div className="hidden items-center gap-1 md:inline-flex">
+              <div className="inline-flex items-center gap-1">
                 <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
                 <span>
                   Avg rating{' '}
@@ -167,7 +167,7 @@ export default function Browse() {
               </div>
             )}
             {aggregates.bookingsThisMonth !== null && (
-              <div className="hidden items-center gap-1 md:inline-flex">
+              <div className="inline-flex items-center gap-1">
                 <span className="h-1 w-1 rounded-full bg-ink-muted/60" />
                 <span>
                   <span className="font-semibold text-ink-secondary">

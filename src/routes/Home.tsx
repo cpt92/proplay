@@ -82,15 +82,23 @@ export default function Home() {
       {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
-          <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
-          <StatNumber Icon={FaCalendarDays} label="Bookings" target={publicBookingCount} />
-          <StatNumber
-            Icon={FaStar}
-            label="Avg rating"
-            target={avgRatingNum}
-            decimals={1}
-          />
+          <RevealCard delayMs={0}>
+            <StatNumber Icon={FaTrophy} label="Pro athletes" target={athletes.length} />
+          </RevealCard>
+          <RevealCard delayMs={80}>
+            <StatNumber Icon={FaBoltLightning} label="Experiences" target={totalExperiences} />
+          </RevealCard>
+          <RevealCard delayMs={160}>
+            <StatNumber Icon={FaCalendarDays} label="Bookings" target={publicBookingCount} />
+          </RevealCard>
+          <RevealCard delayMs={240}>
+            <StatNumber
+              Icon={FaStar}
+              label="Avg rating"
+              target={avgRatingNum}
+              decimals={1}
+            />
+          </RevealCard>
         </div>
       </section>
 
