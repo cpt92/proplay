@@ -110,7 +110,9 @@ export default function Home() {
           <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
             Hire a pro athlete
             <br />
-            <span className="bg-accent-gradient bg-clip-text text-transparent">for the day.</span>
+            <span className="bg-accent-gradient bg-clip-text font-serif italic font-black text-transparent">
+              for the day.
+            </span>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
@@ -251,7 +253,9 @@ export default function Home() {
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
             Our promise
           </div>
-          <h2 className="text-4xl font-extrabold tracking-tight">Book with confidence</h2>
+          <h2 className="text-4xl font-extrabold tracking-tight md:text-5xl">
+            Book with <span className="font-serif italic font-black text-accent-primary">confidence</span>
+          </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {PROMISES.map(({ Icon, title, body }) => (
@@ -312,10 +316,10 @@ function StatNumber({
       <div className="mb-2 flex justify-center">
         <Icon className="h-6 w-6 text-accent-primary" />
       </div>
-      <div className="bg-accent-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
+      <div className="bg-accent-gradient bg-clip-text font-serif text-5xl font-black leading-none text-transparent md:text-6xl">
         {display}
       </div>
-      <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
+      <div className="mt-3 text-xs uppercase tracking-wide text-ink-muted">{label}</div>
     </div>
   );
 }
