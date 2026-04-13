@@ -25,6 +25,7 @@ import AthleteCard from '../components/AthleteCard';
 import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
 import { useCountUp } from '../hooks/useCountUp';
 import { useParallax } from '../hooks/useParallax';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 type IconType = ComponentType<{ className?: string }>;
 
@@ -140,7 +141,11 @@ export default function Home() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {!athletesLoaded
             ? Array.from({ length: 4 }).map((_, i) => <AthleteCardSkeleton key={i} />)
-            : featured.map((a) => <AthleteCard key={a.id} athlete={a} />)}
+            : featured.map((a, i) => (
+                <RevealCard key={a.id} delayMs={i * 80}>
+                  <AthleteCard athlete={a} />
+                </RevealCard>
+              ))}
         </div>
       </section>
 
@@ -185,14 +190,16 @@ export default function Home() {
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {PROMISES.map(({ Icon, title, body }) => (
-            <div key={title} className="card relative overflow-hidden">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
-                <Icon className="h-5 w-5" />
+          {PROMISES.map(({ Icon, title, body }, i) => (
+            <RevealCard key={title} delayMs={i * 100}>
+              <div className="card relative overflow-hidden">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="mb-1 text-xl font-bold">{title}</div>
+                <div className="text-sm leading-relaxed text-ink-muted">{body}</div>
               </div>
-              <div className="mb-1 text-xl font-bold">{title}</div>
-              <div className="text-sm leading-relaxed text-ink-muted">{body}</div>
-            </div>
+            </RevealCard>
           ))}
         </div>
       </section>
@@ -264,6 +271,29 @@ function Step({ n, Icon, title, body }: { n: string; Icon: IconType; title: stri
         <div className="mb-1 text-xl font-bold">{title}</div>
         <div className="text-sm text-ink-muted">{body}</div>
       </div>
+    </div>
+  );
+}
+
+function RevealCard({
+  children,
+  delayMs = 0,
+  className = '',
+}: {
+  children: React.ReactNode;
+  delayMs?: number;
+  className?: string;
+}) {
+  const { ref, visible } = useRevealOnScroll<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delayMs}ms` }}
+      className={`transition-all duration-700 ease-out ${
+        visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+      } ${className}`}
+    >
+      {children}
     </div>
   );
 }
