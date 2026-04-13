@@ -32,6 +32,7 @@ export default {
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         display: ['Space Grotesk', 'Inter', 'sans-serif'],
+        serif: ['Fraunces', 'Georgia', 'serif'],
       },
       backgroundImage: {
         'hero-gradient':
