@@ -1,7 +1,7 @@
 import { useToastStore } from '../store/useToastStore';
 
 const STYLE = {
-  info: 'border-accent-primary/40 bg-accent-primary/10 text-accent-primary',
+  info: 'border-info/40 bg-info/10 text-info',
   success: 'border-ok/40 bg-ok/10 text-ok',
   error: 'border-err/40 bg-err/10 text-err',
 };
