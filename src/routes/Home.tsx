@@ -110,7 +110,7 @@ export default function Home() {
           <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
             Hire a pro athlete
             <br />
-            <span className="bg-hero-gradient bg-clip-text text-transparent">for the day.</span>
+            <span className="bg-accent-gradient bg-clip-text text-transparent">for the day.</span>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
@@ -312,7 +312,7 @@ function StatNumber({
       <div className="mb-2 flex justify-center">
         <Icon className="h-6 w-6 text-accent-primary" />
       </div>
-      <div className="bg-hero-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
+      <div className="bg-accent-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
         {display}
       </div>
       <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>

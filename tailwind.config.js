@@ -36,6 +36,7 @@ export default {
       backgroundImage: {
         'hero-gradient':
           'radial-gradient(ellipse 700px 380px at 85% -10%, rgba(230,57,70,0.18) 0%, transparent 60%), radial-gradient(ellipse 800px 500px at 10% 110%, rgba(74,125,255,0.14) 0%, transparent 60%), linear-gradient(180deg, #050a1a 0%, #07112a 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #e63946 0%, #ff6b78 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease',
