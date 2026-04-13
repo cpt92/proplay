@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa6';
 import { format } from 'date-fns';
 import { useAuthStore } from '../store/useAuthStore';
 import { useBookingsStore } from '../store/useBookingsStore';
@@ -28,7 +29,8 @@ export default function Messages() {
     });
   }, [bookings, athletes, user]);
 
-  const activeId = params.get('booking') ?? myBookings[0]?.id ?? null;
+  const activeId = params.get('booking') ?? null;
+  const clearActive = () => setParams({});
   const activeBooking = myBookings.find((b) => b.id === activeId);
   const activeAthlete = activeBooking ? athletes.find((a) => a.id === activeBooking.athleteId) : null;
   const thread = useMemo(
@@ -62,8 +64,8 @@ export default function Messages() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-[280px_1fr]">
-          {/* Conversation list */}
-          <div className="card space-y-1 p-2 md:max-h-[600px] md:overflow-y-auto">
+          {/* Conversation list — hidden on mobile when a thread is open */}
+          <div className={`card space-y-1 p-2 md:max-h-[600px] md:overflow-y-auto ${activeId ? 'hidden md:block' : ''}`}>
             {myBookings.map((b) => {
               const a = athletes.find((x) => x.id === b.athleteId);
               const other = user.role === 'fan' ? a?.name : b.fanName;
@@ -89,17 +91,25 @@ export default function Messages() {
             })}
           </div>
 
-          {/* Chat window */}
-          <div className="card flex h-[600px] flex-col p-0">
+          {/* Chat window — hidden on mobile when no thread is open */}
+          <div className={`card flex h-[600px] flex-col p-0 ${!activeId ? 'hidden md:flex' : 'flex'}`}>
             {activeBooking && activeAthlete ? (
               <>
                 <div className="flex items-center gap-3 border-b border-white/10 p-4">
+                  <button
+                    type="button"
+                    onClick={clearActive}
+                    aria-label="Back to conversations"
+                    className="-ml-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-ink-muted hover:bg-white/5 hover:text-white md:hidden"
+                  >
+                    <FaArrowLeft className="h-4 w-4" />
+                  </button>
                   <img src={activeAthlete.photo} alt="" className="h-10 w-10 rounded-lg object-cover" />
-                  <div>
-                    <div className="font-semibold">
+                  <div className="min-w-0">
+                    <div className="truncate font-semibold">
                       {user.role === 'fan' ? activeAthlete.name : activeBooking.fanName}
                     </div>
-                    <div className="text-xs text-ink-muted">
+                    <div className="truncate text-xs text-ink-muted">
                       {activeBooking.experienceTitle} · {format(new Date(activeBooking.date), 'MMM d')} · {activeBooking.time}
                     </div>
                   </div>

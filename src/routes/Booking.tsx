@@ -132,6 +132,11 @@ export default function Booking() {
         </div>
       </div>
 
+      {/* Current-step label (mobile only) */}
+      <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-accent-primary sm:hidden">
+        Step {step + 1} of {STEPS.length} · {STEPS[step]}
+      </div>
+
       {/* Progress */}
       <div className="mb-8 flex items-center gap-2">
         {STEPS.map((s, i) => (
@@ -143,7 +148,7 @@ export default function Booking() {
             >
               {i + 1}
             </div>
-            <div className={`text-xs ${i <= step ? 'text-ink-primary' : 'text-ink-muted'}`}>{s}</div>
+            <div className={`hidden text-xs sm:block ${i <= step ? 'text-ink-primary' : 'text-ink-muted'}`}>{s}</div>
             {i < STEPS.length - 1 && <div className="h-px flex-1 bg-white/10" />}
           </div>
         ))}

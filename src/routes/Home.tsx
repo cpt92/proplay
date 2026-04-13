@@ -13,6 +13,9 @@ import {
   FaMagnifyingGlass,
   FaCalendarDays,
   FaHandshake,
+  FaShieldHalved,
+  FaLock,
+  FaHeart,
 } from 'react-icons/fa6';
 import { GiTennisRacket } from 'react-icons/gi';
 import { useAthletesStore } from '../store/useAthletesStore';
@@ -33,31 +36,23 @@ const SPORT_CATEGORIES: { name: string; Icon: IconType; gradient: string }[] = [
   { name: 'Baseball', Icon: FaBaseball, gradient: 'from-red-500 to-rose-400' },
 ];
 
-const TESTIMONIALS = [
+const PROMISES: { Icon: IconType; title: string; body: string }[] = [
   {
-    quote:
-      "Booked a former NHL forward to skate with my son's team. The kids talked about it for weeks. Worth every penny.",
-    name: 'Marcus T.',
-    role: 'Hockey dad, Toronto',
-    avatar: 'https://i.pravatar.cc/200?img=53',
+    Icon: FaShieldHalved,
+    title: 'Verified pros only',
+    body: 'Every athlete is identity-checked and background-verified before they join the roster.',
   },
   {
-    quote:
-      "I play in a beer league and getting to golf 18 holes with a real pro was unreal. He was so down to earth and had the best stories.",
-    name: 'Jenna L.',
-    role: 'Recreational golfer',
-    avatar: 'https://i.pravatar.cc/200?img=47',
+    Icon: FaLock,
+    title: 'Secure payments',
+    body: 'Card details never touch our servers. Funds are held until the experience is complete.',
   },
   {
-    quote:
-      "I gifted my girlfriend a tennis lesson with a former WTA pro for her birthday. Best gift I've ever given. She still talks about it.",
-    name: 'Devon S.',
-    role: 'Boyfriend of the year',
-    avatar: 'https://i.pravatar.cc/200?img=8',
+    Icon: FaHeart,
+    title: 'Satisfaction guarantee',
+    body: 'If the experience falls short, we make it right — full refund or rebook, your call.',
   },
 ];
-
-const PRESS = ['THE ATHLETIC', 'TSN', 'ESPN', 'SPORTSNET', 'BLEACHER REPORT'];
 
 export default function Home() {
   const athletes = useAthletesStore((s) => s.athletes);
@@ -150,22 +145,6 @@ export default function Home() {
             <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
             <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
             <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ PRESS BAR ============ */}
-      <section className="border-y border-white/5 bg-white/[0.02]">
-        <div className="mx-auto max-w-6xl px-6 py-8">
-          <div className="mb-4 text-center text-xs uppercase tracking-[0.2em] text-ink-muted">
-            As featured in
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 opacity-60">
-            {PRESS.map((p) => (
-              <div key={p} className="text-sm font-bold tracking-[0.25em] text-ink-secondary">
-                {p}
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -268,31 +247,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ TESTIMONIALS ============ */}
+      {/* ============ OUR PROMISE ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-28">
         <div className="mb-12 text-center">
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
-            From real fans
+            Our promise
           </div>
-          <h2 className="text-4xl font-extrabold tracking-tight">Memories that don't fade</h2>
+          <h2 className="text-4xl font-extrabold tracking-tight">Book with confidence</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="card relative">
-              <div className="absolute -top-4 left-6 text-5xl text-accent-primary/40">"</div>
-              <p className="relative pt-3 text-sm leading-relaxed text-ink-secondary">{t.quote}</p>
-              <div className="mt-6 flex items-center gap-3 border-t border-white/5 pt-4">
-                <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
-                <div>
-                  <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-ink-muted">{t.role}</div>
-                </div>
-                <div className="ml-auto flex items-center gap-0.5 text-warn">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <FaStar key={i} className="h-3 w-3" />
-                ))}
+          {PROMISES.map(({ Icon, title, body }) => (
+            <div key={title} className="card relative overflow-hidden">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
+                <Icon className="h-5 w-5" />
               </div>
-              </div>
+              <div className="mb-1 text-xl font-bold">{title}</div>
+              <div className="text-sm leading-relaxed text-ink-muted">{body}</div>
             </div>
           ))}
         </div>

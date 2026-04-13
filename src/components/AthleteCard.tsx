@@ -1,9 +1,22 @@
 import { Link } from 'react-router-dom';
-import { FaStar, FaCircleCheck, FaHeart, FaRegHeart } from 'react-icons/fa6';
+import { FaStar, FaCircleCheck, FaHeart, FaRegHeart, FaLocationDot, FaRegClock } from 'react-icons/fa6';
 import { type Athlete, minPrice } from '../lib/types';
 import { useFavoritesStore } from '../store/useFavoritesStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { toast } from '../store/useToastStore';
+
+function shortResponseTime(raw: string): string {
+  if (!raw) return 'Responsive';
+  const match = raw.match(/(\d+)\s*(hour|hr|minute|min|day)/i);
+  if (match) {
+    const n = match[1];
+    const unit = match[2].toLowerCase();
+    if (unit.startsWith('hour') || unit.startsWith('hr')) return `~${n}h response`;
+    if (unit.startsWith('min')) return `~${n}m response`;
+    if (unit.startsWith('day')) return `~${n}d response`;
+  }
+  return raw.replace(/^Usually responds in\s*/i, '~');
+}
 
 export default function AthleteCard({ athlete }: { athlete: Athlete }) {
   const price = minPrice(athlete);
@@ -77,6 +90,12 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
           </div>
           <div className="text-xl font-extrabold leading-tight text-white">{athlete.name}</div>
           <div className="text-xs text-white/80">{athlete.position}</div>
+          {athlete.location && (
+            <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-white/70">
+              <FaLocationDot className="h-2.5 w-2.5" />
+              {athlete.location}
+            </div>
+          )}
         </div>
       </div>
 
@@ -87,8 +106,9 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
           <span className="font-bold text-ink-primary">{athlete.rating}</span>
           <span className="text-ink-muted">({athlete.reviews})</span>
         </div>
-        <div className="text-xs font-semibold text-accent-primary opacity-0 transition group-hover:opacity-100">
-          View profile →
+        <div className="flex items-center gap-1 text-[11px] text-ink-muted">
+          <FaRegClock className="h-3 w-3" />
+          <span className="truncate">{shortResponseTime(athlete.responseTime)}</span>
         </div>
       </div>
     </Link>
