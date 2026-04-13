@@ -145,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* ============ HOW IT WORKS ============ */}
-      <section className="mx-auto max-w-6xl px-6 pt-28">
+      <section id="how-it-works" className="mx-auto max-w-6xl px-6 pt-28">
         <div className="mb-12 text-center">
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
             How it works
@@ -319,9 +319,9 @@ function HeroSection() {
             >
               Browse athletes →
             </Link>
-            <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
+            <a href="#how-it-works" className="btn-secondary !px-7 !py-4 text-base">
               How it works
-            </Link>
+            </a>
           </div>
 
           {/* Trust microcopy */}
