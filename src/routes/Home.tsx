@@ -24,6 +24,7 @@ import { useReviewsStore } from '../store/useReviewsStore';
 import AthleteCard from '../components/AthleteCard';
 import AthleteCardSkeleton from '../components/AthleteCardSkeleton';
 import { useCountUp } from '../hooks/useCountUp';
+import { useParallax } from '../hooks/useParallax';
 
 type IconType = ComponentType<{ className?: string }>;
 
@@ -75,81 +76,7 @@ export default function Home() {
   return (
     <div className="animate-fade-in">
       {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden">
-        {/* Background mesh gradient — slowly drifts over time */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 animate-gradient-drift rounded-full bg-accent-primary/30 blur-[120px]" />
-          <div
-            className="absolute -top-20 left-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-tertiary/20 blur-[120px]"
-            style={{ animationDelay: '-7s' }}
-          />
-          <div
-            className="absolute -top-20 right-1/4 h-[500px] w-[700px] animate-gradient-drift rounded-full bg-accent-secondary/20 blur-[120px]"
-            style={{ animationDelay: '-14s' }}
-          />
-        </div>
-        {/* Subtle grid */}
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-
-        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 text-center md:pt-32">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-ink-secondary backdrop-blur">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
-            </span>
-            Now booking experiences in the GTA
-          </div>
-
-          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
-            Hire a pro athlete
-            <br />
-            <span className="bg-accent-gradient bg-clip-text font-serif italic font-black text-transparent">
-              for the day.
-            </span>
-          </h1>
-
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
-            Rent a real professional for a round of golf, a skate with your kids' team, a
-            private training session, or whatever you're into. Real stars, in person.
-          </p>
-
-          {/* Sport pills */}
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-            {SPORT_CATEGORIES.map(({ name, Icon }) => (
-              <span
-                key={name}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm text-ink-secondary backdrop-blur"
-              >
-                <Icon className="h-3.5 w-3.5 text-accent-primary" />
-                {name}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/browse" className="btn-primary !px-7 !py-4 text-base shadow-2xl shadow-accent-primary/30">
-              Browse athletes →
-            </Link>
-            <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
-              Become a pro
-            </Link>
-          </div>
-
-          {/* Trust microcopy */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-ink-muted">
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
-            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ============ STATS ============ */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
@@ -338,5 +265,73 @@ function Step({ n, Icon, title, body }: { n: string; Icon: IconType; title: stri
         <div className="text-sm text-ink-muted">{body}</div>
       </div>
     </div>
+  );
+}
+
+function HeroSection() {
+  const parallaxRef = useParallax(0.18);
+  return (
+    <section className="relative overflow-hidden">
+      {/* Parallax photo background */}
+      <div ref={parallaxRef} className="pointer-events-none absolute inset-0 -z-20 h-[140%] will-change-transform">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/hero-arena.jpg')", backgroundColor: '#050a1a' }}
+        />
+      </div>
+      {/* Navy gradient overlay for legibility */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-bg-primary/55 via-bg-primary/75 to-bg-primary" />
+      {/* Crimson accent glow, top right */}
+      <div className="pointer-events-none absolute -right-32 -top-32 -z-10 h-[520px] w-[520px] rounded-full bg-accent-primary/15 blur-[140px]" />
+      {/* Noise grain */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-6 pb-28 pt-24 md:pb-32 md:pt-36">
+        <div className="max-w-3xl">
+          {/* Eyebrow */}
+          <div className="mb-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-accent-primary">
+            <span className="h-px w-8 bg-accent-primary" />
+            Elite experiences
+          </div>
+
+          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
+            Train with the
+            <br />
+            <span className="bg-accent-gradient bg-clip-text font-serif italic font-black text-transparent">
+              greatest ever.
+            </span>
+          </h1>
+
+          <p className="mb-10 max-w-xl text-lg text-ink-secondary md:text-xl">
+            Book one-on-one days with real pro athletes — private training, game tickets, meet-and-greets. Verified. Insured. Unforgettable.
+          </p>
+
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <Link
+              to="/browse"
+              className="btn-primary !px-7 !py-4 text-base shadow-2xl shadow-accent-primary/30"
+            >
+              Browse athletes →
+            </Link>
+            <Link to="/login" className="btn-secondary !px-7 !py-4 text-base">
+              How it works
+            </Link>
+          </div>
+
+          {/* Trust microcopy */}
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-ink-muted">
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Verified pros only</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> Secure payments</span>
+            <span className="inline-flex items-center gap-1.5"><FaCheck className="h-3 w-3 text-ok" /> 100% satisfaction guarantee</span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
