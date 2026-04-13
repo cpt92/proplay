@@ -1,17 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0a0a"/>
-      <stop offset="100%" stop-color="#1a1a2e"/>
+      <stop offset="0%" stop-color="#050a1a"/>
+      <stop offset="100%" stop-color="#0b1a3a"/>
     </linearGradient>
     <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#ec4899"/>
+      <stop offset="0%" stop-color="#e63946"/>
+      <stop offset="100%" stop-color="#ff6b78"/>
     </linearGradient>
     <radialGradient id="glow" cx="50%" cy="40%" r="40%">
-      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#e63946" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#e63946" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
@@ -41,7 +40,7 @@
   </text>
 
   <!-- URL -->
-  <text x="80" y="580" font-family="Inter, sans-serif" font-size="22" font-weight="600" fill="#6366f1">
+  <text x="80" y="580" font-family="Inter, sans-serif" font-size="22" font-weight="600" fill="#e63946">
     playwithastar.com
   </text>
 </svg>

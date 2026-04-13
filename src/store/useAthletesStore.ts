@@ -99,7 +99,7 @@ export const useAthletesStore = create<State & Actions>((set, get) => ({
         responseTime: (row.response_time as string) ?? '',
         bio: (row.bio as string) ?? '',
         verified: Boolean(row.verified),
-        color: (row.color as string) ?? '#6366f1',
+        color: (row.color as string) ?? '#e63946',
         career: {
           gamesPlayed: (row.career_games_played as string) ?? '',
           goals: (row.career_goals as string) ?? '',

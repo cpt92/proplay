@@ -11,7 +11,7 @@ export default function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
                 <FaStar className="h-4 w-4" />
               </span>
-              <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
+              <span className="bg-accent-gradient bg-clip-text text-transparent">PlayWithAStar</span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-ink-muted">
               Hire a real pro athlete for the day. Real experiences with real stars — golf, hockey,

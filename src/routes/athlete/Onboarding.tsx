@@ -5,7 +5,7 @@ import { useAthletesStore } from '../../store/useAthletesStore';
 import type { Experience } from '../../lib/types';
 
 const STEPS = ['Profile', 'Career', 'First experience', 'Availability'] as const;
-const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#22d3ee', '#10b981', '#f59e0b', '#ef4444', '#1e3a8a'];
+const COLORS = ['#e63946', '#4a7dff', '#34d399', '#fbbf24', '#ff5a67', '#b71c2a', '#eaf0ff', '#050a1a'];
 
 export default function Onboarding() {
   const navigate = useNavigate();

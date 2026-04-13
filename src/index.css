@@ -18,7 +18,7 @@
     font-feature-settings: 'ss01';
   }
   :focus-visible {
-    @apply outline-2 outline-accent-primary;
+    @apply outline-2 outline-info;
   }
 
   /* Custom scrollbar */
@@ -36,39 +36,29 @@
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 102, 241, 0.4);
+    background: rgba(74, 125, 255, 0.4);
     background-clip: padding-box;
     border: 2px solid transparent;
   }
 
   /* Selection color */
   ::selection {
-    background: rgba(99, 102, 241, 0.4);
+    background: rgba(74, 125, 255, 0.4);
     color: white;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-5 py-3 font-semibold text-white shadow-lg shadow-accent-primary/20 transition-all duration-200;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-white shadow-lg shadow-accent-primary/30 transition-all duration-200;
+    background: #e63946;
   }
   .btn-primary:hover {
-    @apply -translate-y-0.5 shadow-xl shadow-accent-primary/30;
+    @apply -translate-y-0.5 shadow-xl shadow-accent-primary/40;
+    background: #ff4d5a;
   }
   .btn-primary:active {
     @apply translate-y-0 scale-[0.98];
-  }
-  .btn-primary::before {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-200;
-    background: linear-gradient(135deg, #818cf8, #c084fc);
-  }
-  .btn-primary:hover::before {
-    @apply opacity-100;
-  }
-  .btn-primary > * {
-    @apply relative z-10;
   }
 
   .btn-secondary {
@@ -88,10 +78,10 @@
     @apply inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-secondary;
   }
   .input {
-    @apply w-full rounded-lg border border-white/10 bg-bg-secondary/60 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:border-accent-primary focus:outline-none;
+    @apply w-full rounded-lg border border-white/10 bg-bg-secondary/60 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:border-info focus:outline-none;
   }
   .textarea {
-    @apply w-full rounded-lg border border-white/10 bg-bg-secondary/60 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:border-accent-primary focus:outline-none;
+    @apply w-full rounded-lg border border-white/10 bg-bg-secondary/60 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:border-info focus:outline-none;
   }
 
   /* Noise texture overlay — adds subtle grain to flat areas */

@@ -5,24 +5,28 @@ export default {
     extend: {
       colors: {
         bg: {
-          primary: '#0a0a0a',
-          secondary: '#1a1a2e',
-          tertiary: '#16162a',
+          primary: '#050a1a',
+          secondary: '#0b1a3a',
+          tertiary: '#11234a',
         },
-        card: '#1a1a2e',
+        card: '#0b1a3a',
         accent: {
-          primary: '#6366f1',
-          secondary: '#a855f7',
-          tertiary: '#ec4899',
+          primary: '#e63946',
+          secondary: '#ff4d5a',
+          tertiary: '#b71c2a',
+          hover: '#ff4d5a',
         },
-        cyan: '#22d3ee',
-        ok: '#10b981',
-        warn: '#f59e0b',
-        err: '#ef4444',
+        info: {
+          DEFAULT: '#4a7dff',
+          soft: 'rgba(74, 125, 255, 0.12)',
+        },
+        ok: '#34d399',
+        warn: '#fbbf24',
+        err: '#ff5a67',
         ink: {
-          primary: '#f1f5f9',
-          secondary: '#94a3b8',
-          muted: '#64748b',
+          primary: '#eaf0ff',
+          secondary: '#8892b0',
+          muted: '#5c6784',
         },
       },
       fontFamily: {
@@ -30,7 +34,9 @@ export default {
         display: ['Space Grotesk', 'Inter', 'sans-serif'],
       },
       backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+        'hero-gradient':
+          'radial-gradient(ellipse 700px 380px at 85% -10%, rgba(230,57,70,0.18) 0%, transparent 60%), radial-gradient(ellipse 800px 500px at 10% 110%, rgba(74,125,255,0.14) 0%, transparent 60%), linear-gradient(180deg, #050a1a 0%, #07112a 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #e63946 0%, #ff6b78 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease',

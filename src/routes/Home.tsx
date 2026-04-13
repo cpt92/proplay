@@ -27,13 +27,13 @@ import { useCountUp } from '../hooks/useCountUp';
 
 type IconType = ComponentType<{ className?: string }>;
 
-const SPORT_CATEGORIES: { name: string; Icon: IconType; gradient: string }[] = [
-  { name: 'Hockey', Icon: FaHockeyPuck, gradient: 'from-blue-500 to-cyan-400' },
-  { name: 'Golf', Icon: FaGolfBallTee, gradient: 'from-emerald-500 to-teal-400' },
-  { name: 'Soccer', Icon: FaFutbol, gradient: 'from-lime-500 to-green-400' },
-  { name: 'Basketball', Icon: FaBasketball, gradient: 'from-orange-500 to-amber-400' },
-  { name: 'Tennis', Icon: GiTennisRacket, gradient: 'from-yellow-400 to-lime-300' },
-  { name: 'Baseball', Icon: FaBaseball, gradient: 'from-red-500 to-rose-400' },
+const SPORT_CATEGORIES: { name: string; Icon: IconType }[] = [
+  { name: 'Hockey', Icon: FaHockeyPuck },
+  { name: 'Golf', Icon: FaGolfBallTee },
+  { name: 'Soccer', Icon: FaFutbol },
+  { name: 'Basketball', Icon: FaBasketball },
+  { name: 'Tennis', Icon: GiTennisRacket },
+  { name: 'Baseball', Icon: FaBaseball },
 ];
 
 const PROMISES: { Icon: IconType; title: string; body: string }[] = [
@@ -110,7 +110,7 @@ export default function Home() {
           <h1 className="mb-6 font-display text-5xl font-bold leading-[1.02] tracking-tighter md:text-7xl lg:text-[5.5rem]">
             Hire a pro athlete
             <br />
-            <span className="bg-hero-gradient bg-clip-text text-transparent">for the day.</span>
+            <span className="bg-accent-gradient bg-clip-text text-transparent">for the day.</span>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg text-ink-secondary md:text-xl">
@@ -173,15 +173,13 @@ export default function Home() {
           <h2 className="text-4xl font-extrabold tracking-tight">Pick your game</h2>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {SPORT_CATEGORIES.map(({ name, Icon, gradient }) => (
+          {SPORT_CATEGORIES.map(({ name, Icon }) => (
             <Link
               key={name}
               to="/browse"
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 text-center transition hover:-translate-y-1 hover:border-white/30"
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 text-center transition hover:-translate-y-1 hover:border-accent-primary/40"
             >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 transition group-hover:opacity-20`}
-              />
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/10 to-transparent opacity-0 transition group-hover:opacity-100" />
               <div className="relative">
                 <div className="mb-3 flex justify-center">
                   <Icon className="h-8 w-8 text-accent-primary transition group-hover:text-white" />
@@ -314,7 +312,7 @@ function StatNumber({
       <div className="mb-2 flex justify-center">
         <Icon className="h-6 w-6 text-accent-primary" />
       </div>
-      <div className="bg-hero-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
+      <div className="bg-accent-gradient bg-clip-text font-display text-3xl font-extrabold text-transparent md:text-4xl">
         {display}
       </div>
       <div className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{label}</div>

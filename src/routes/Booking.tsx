@@ -265,10 +265,10 @@ export default function Booking() {
                     appearance: {
                       theme: 'night',
                       variables: {
-                        colorPrimary: '#6366f1',
-                        colorBackground: '#1a1a2e',
-                        colorText: '#f1f5f9',
-                        colorDanger: '#ef4444',
+                        colorPrimary: '#e63946',
+                        colorBackground: '#0b1a3a',
+                        colorText: '#eaf0ff',
+                        colorDanger: '#ff5a67',
                         fontFamily: 'Inter, sans-serif',
                         borderRadius: '8px',
                       },

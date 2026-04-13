@@ -8,7 +8,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Are these real professional athletes?',
-    a: 'Yes — every athlete on the platform is a verified former or current professional. Look for the cyan ✓ badge on their profile. We confirm credentials before they\'re listed.',
+    a: 'Yes — every athlete on the platform is a verified former or current professional. Look for the blue ✓ badge on their profile. We confirm credentials before they\'re listed.',
   },
   {
     q: 'How much does it cost?',

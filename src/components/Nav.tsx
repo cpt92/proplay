@@ -52,7 +52,7 @@ export default function Nav() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-hero-gradient text-white shadow-lg shadow-accent-primary/30">
             <FaStar className="h-4 w-4" />
           </span>
-          <span className="bg-hero-gradient bg-clip-text text-transparent">PlayWithAStar</span>
+          <span className="bg-accent-gradient bg-clip-text text-transparent">PlayWithAStar</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">{links}</nav>

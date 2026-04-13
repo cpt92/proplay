@@ -60,7 +60,7 @@ export default function AthleteCard({ athlete }: { athlete: Athlete }) {
         {/* Top row: verified + price + favorite */}
         <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2">
           {athlete.verified ? (
-            <div className="inline-flex items-center gap-1 rounded-full bg-cyan/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan backdrop-blur">
+            <div className="inline-flex items-center gap-1 rounded-full bg-info/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-info backdrop-blur">
               <FaCircleCheck className="h-3 w-3" /> Verified
             </div>
           ) : (
